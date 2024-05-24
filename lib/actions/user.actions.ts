@@ -1,17 +1,15 @@
-import prisma from "@/prisma/PrismaClient";
-// import { User } from "@clerk/nextjs/server";
+import prisma from "@/lib/PrismaClient";
+import { User } from "@prisma/client";
 
-export const createUser = (user: any) => {
+export const createUser = (user: User) => {
    console.log("User created:", user);
-   if (!user.id || !user.emailAddresses[0].emailAddress) {
+   if (!user.id) {
       console.error("Error creating user");
       return;
    }
 
    const createUser = prisma.user.create({
-      data: {
-         ...user,
-      },
+      data: user,
    });
 
    if (!createUser) {
