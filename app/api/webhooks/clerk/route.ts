@@ -1,6 +1,6 @@
-import { createUser } from "@/lib/actions/user.actions";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
+import { NextResponse } from "next/server";
 import { Webhook } from "svix";
 
 export async function POST(req: Request) {
@@ -53,10 +53,15 @@ export async function POST(req: Request) {
    // For this guide, you simply log the payload to the console
    const { id } = evt.data;
    const eventType = evt.type;
-
-   console.log(`Received event ${eventType} with ID ${id}`);
-   console.log("Payload:", payload);
-
+   if (eventType === "user.created") {
+      const user = {
+         id,
+         email: evt.data.email_addresses[0].email_address,
+         firstName: evt.data.first_name,
+         lastName: evt.data.last_name,
+      };
+      return NextResponse.json({ messsage: "Hello World", data: user });
+   }
 
    return new Response("", { status: 200 });
 }
