@@ -19,13 +19,16 @@ export const createUser = (data: User) => {
    }
 };
 
+// Todo need to work on this
 export const updateUser = (data: any, id: string) => {
+   console.log("data", data, "id", id);
+
    try {
       const updateUser = prisma.user.update({
          where: {
             clerkId: id,
          },
-         ...data,
+         data,
       });
 
       return updateUser;

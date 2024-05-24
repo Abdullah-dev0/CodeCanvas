@@ -1,10 +1,13 @@
+import Header from "@/components/shared/Header";
+
 export default function RootLayout({
    children,
 }: Readonly<{
    children: React.ReactNode;
 }>) {
    return (
-      <main className="flex justify-center items-center min-h-screen py-6">
+      <main>
+         <Header />
          {children}
       </main>
    );
