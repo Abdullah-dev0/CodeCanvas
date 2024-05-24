@@ -13,8 +13,8 @@ export const createUser = (data: User) => {
       }
 
       return JSON.parse(JSON.stringify(createUser));
-   } catch (error) {
-      console.log("Error creating user", error);
+   } catch (error: any) {
+      throw new Error("Error creating user", error);
    }
 };
 
