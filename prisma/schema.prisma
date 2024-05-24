@@ -15,8 +15,8 @@ model User {
   firstName String?
   lastName  String?
   image     String?
-  createdAt DateTime  
-  updatedAt DateTime  @updatedAt
+  createdAt Int
+  updatedAt Int
   Project   Project[]
 }
 
