@@ -1,3 +1,4 @@
+import Header from "@/components/shared/Header";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark, shadesOfPurple } from "@clerk/themes";
@@ -43,6 +44,7 @@ export default function RootLayout({
                   enableSystem
                   disableTransitionOnChange
                >
+                  <Header />
                   {children}
                </ThemeProvider>
             </body>

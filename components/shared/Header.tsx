@@ -1,4 +1,5 @@
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { ModeToggle } from "../theme/Toggle";
 import { Button } from "../ui/button";
 
 const Header = () => {
@@ -12,6 +13,7 @@ const Header = () => {
          <SignedIn>
             <UserButton />
          </SignedIn>
+         <ModeToggle />
       </header>
    );
 };
