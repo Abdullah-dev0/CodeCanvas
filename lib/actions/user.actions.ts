@@ -25,7 +25,7 @@ export const updateUser = (data: any, id: string) => {
          where: {
             clerkId: id,
          },
-         data,
+         ...data,
       });
 
       return updateUser;
