@@ -44,7 +44,7 @@ export async function POST(req: Request) {
       }) as WebhookEvent;
    } catch (err) {
       console.error("Error verifying webhook:", err);
-      return new Response("Error occured", {
+      return new Response("Error occured during verify svix", {
          status: 400,
       });
    }
@@ -54,35 +54,9 @@ export async function POST(req: Request) {
    const { id } = evt.data;
    const eventType = evt.type;
 
-   if (eventType === "user.created") {
-      const {
-         email_addresses,
-         first_name,
-         last_name,
-         id,
-         image_url,
-         username,
-      } = evt.data;
+   console.log(`Received event ${eventType} with ID ${id}`);
+   console.log("Payload:", payload);
 
-      const user = {
-         clerkId: id,
-         username: username,
-         email: email_addresses[0].email_address,
-         firstName: first_name,
-         lastName: last_name,
-         image: image_url,
-      };
-
-      const User = await createUser(user);
-
-      if (!User) {
-         return new Response("Error occured", {
-            status: 400,
-         });
-      }
-
-      console.log("User created:", User);
-   }
 
    return new Response("", { status: 200 });
 }
