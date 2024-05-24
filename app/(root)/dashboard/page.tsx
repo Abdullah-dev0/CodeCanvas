@@ -6,6 +6,7 @@ const Dashboard = async () => {
    return (
       <div>
          <p>Welcome {user.fullName}!</p>
+         <p>{user.id}</p>
       </div>
    );
 };

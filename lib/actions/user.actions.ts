@@ -19,5 +19,50 @@ export const createUser = (user: any) => {
       return;
    }
 
-   return createUser;
+   return JSON.parse(JSON.stringify(createUser));
+};
+
+export const updateUser = (user: any, id: string) => {
+   console.log("User updated:", user);
+   if (!user.id || !user.emailAddresses[0].emailAddress) {
+      console.error("Error updating user");
+      return;
+   }
+
+   const updateUser = prisma.user.update({
+      where: {
+         clerkId: id,
+      },
+      data: {
+         ...user,
+      },
+   });
+
+   if (!updateUser) {
+      console.error("Error updating user");
+      return;
+   }
+
+   return JSON.parse(JSON.stringify(updateUser));
+};
+
+export const deleteUser = (id: string) => {
+   console.log("User deleted:", id);
+   if (!id) {
+      console.error("NO id provided to delete user");
+      return;
+   }
+
+   const deleteUser = prisma.user.delete({
+      where: {
+         clerkId: id,
+      },
+   });
+
+   if (!deleteUser) {
+      console.error("Error deleting user");
+      return;
+   }
+
+   return JSON.parse(JSON.stringify(deleteUser));
 };
