@@ -8,13 +8,13 @@ const Header = () => {
          <h1 className="text-4xl font-bold">CodeCanvas</h1>
          <div className="flex items-center gap-5">
             <SignedOut>
-               <Button>
-                  <SignInButton />
-               </Button>
+               <SignInButton>
+                  <Button>Sign in</Button>
+               </SignInButton>
             </SignedOut>
 
             <SignedIn>
-               <UserButton />
+               <UserButton  />
             </SignedIn>
             <ModeToggle />
          </div>
