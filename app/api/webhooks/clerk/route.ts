@@ -61,6 +61,8 @@ export async function POST(req: Request) {
          first_name,
          username,
          last_name,
+         created_at,
+         updated_at
       } = evt.data;
 
       const user = {
@@ -70,6 +72,8 @@ export async function POST(req: Request) {
          firstName: first_name,
          lastName: last_name,
          image: image_url,
+         createdAt: created_at,
+         updatedAt: updated_at
       };
 
       const newUser = await createUser(user as User);
