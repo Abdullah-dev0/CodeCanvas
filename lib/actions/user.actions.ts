@@ -1,21 +1,17 @@
 import prisma from "@/lib/PrismaClient";
 import { User } from "@prisma/client";
 
-export const createUser = (user: User) => {
-   console.log("User created:", user);
-
-   if (!user.id) {
+export const createUser = (data: User) => {
+   if (!data.id) {
       return new Response("Error creating user -- no id provided");
    }
-
    try {
-      const createUser = prisma.user.create({
-         data: user,
-      });
+      const createUser = prisma.user.create({ data });
 
       if (!createUser) {
          return new Response("Error occured while Creating a user ", {});
       }
+
       return JSON.parse(JSON.stringify(createUser));
    } catch (error) {
       console.log("Error creating user", error);
