@@ -1,5 +1,5 @@
 import { createUser, deleteUser, updateUser } from "@/lib/actions/user.actions";
-import { WebhookEvent, clerkClient } from "@clerk/nextjs/server";
+import { WebhookEvent } from "@clerk/nextjs/server";
 import { User } from "@prisma/client";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
@@ -74,13 +74,6 @@ export async function POST(req: Request) {
 
       const newUser = await createUser(user as User);
 
-      if (newUser) {
-         await clerkClient.users.updateUserMetadata(id, {
-            publicMetadata: {
-               userId: newUser._id,
-            },
-         });
-      }
       if (!newUser) {
          return new Response("Error occured", {
             status: 400,

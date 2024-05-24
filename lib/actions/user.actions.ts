@@ -2,63 +2,52 @@ import prisma from "@/lib/PrismaClient";
 import { User } from "@prisma/client";
 
 export const createUser = (data: User) => {
-   if (!data.id) {
-      return new Response("Error creating user -- no id provided");
-   }
+   if (!data)
+      return new Response("No data provided to create user", { status: 400 });
    try {
       const createUser = prisma.user.create({ data });
 
       if (!createUser) {
-         return new Response("Error occured while Creating a user ", {});
+         return new Response("Error occured while Creating a user ", {
+            status: 400,
+         });
       }
 
-      return JSON.parse(JSON.stringify(createUser));
-   } catch (error: any) {
-      throw new Error("Error creating user", error);
+      return createUser;
+   } catch (error) {
+      console.log("Error creating", error);
    }
 };
 
-export const updateUser = (user: any, id: string) => {
-   console.log("User updated:", user);
-   if (!user.id || !user.emailAddresses[0].emailAddress) {
-      console.error("Error updating user");
-      return;
+export const updateUser = (data: any, id: string) => {
+   try {
+      const updateUser = prisma.user.update({
+         where: {
+            clerkId: id,
+         },
+         data,
+      });
+
+      return updateUser;
+   } catch (error) {
+      return null;
    }
-
-   const updateUser = prisma.user.update({
-      where: {
-         clerkId: id,
-      },
-      data: {
-         ...user,
-      },
-   });
-
-   if (!updateUser) {
-      console.error("Error updating user");
-      return;
-   }
-
-   return JSON.parse(JSON.stringify(updateUser));
 };
 
 export const deleteUser = (id: string) => {
-   console.log("User deleted:", id);
    if (!id) {
-      console.error("NO id provided to delete user");
-      return;
+      return new Response("No ID provided to delete user", { status: 400 });
    }
 
-   const deleteUser = prisma.user.delete({
-      where: {
-         clerkId: id,
-      },
-   });
+   try {
+      const deleteUser = prisma.user.delete({
+         where: {
+            clerkId: id,
+         },
+      });
 
-   if (!deleteUser) {
-      console.error("Error deleting user");
-      return;
+      return deleteUser;
+   } catch (error) {
+      console.log("Error deleting", error);
    }
-
-   return JSON.parse(JSON.stringify(deleteUser));
 };
