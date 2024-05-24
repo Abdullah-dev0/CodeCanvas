@@ -81,6 +81,11 @@ export async function POST(req: Request) {
             },
          });
       }
+      if (!newUser) {
+         return new Response("Error occured", {
+            status: 400,
+         });
+      }
 
       return NextResponse.json({ message: "OK", user: newUser });
    }
