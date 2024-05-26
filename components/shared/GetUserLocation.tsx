@@ -3,13 +3,14 @@
 import { useEffect, useState } from "react";
 
 const GetUserLocation = () => {
+   const [ip, setIP] = useState(null);
+   const [location, setLocation] = useState<any>(null);
+
    const geoLocationKey = process.env.NEXT_PUBLIC_GEOLOCATION_API_KEY2;
    if (!geoLocationKey) {
       console.log("Please provide a valid API key for the Geolocation API");
       return null;
    }
-   const [ip, setIP] = useState(null);
-   const [location, setLocation] = useState<any>(null);
 
    const fetchIP = async () => {
       const res = await fetch("https://api.ipify.org?format=json");
