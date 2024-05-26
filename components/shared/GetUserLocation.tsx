@@ -7,10 +7,18 @@ const GetUserLocation = () => {
    const [location, setLocation] = useState<any>(null);
 
    const geoLocationKey = process.env.NEXT_PUBLIC_GEOLOCATION_API_KEY2;
-   if (!geoLocationKey) {
-      console.log("Please provide a valid API key for the Geolocation API");
-      return null;
-   }
+
+   useEffect(() => {
+      fetchIP();
+
+      // @ts-ignore-next-line
+   }, []);
+
+   useEffect(() => {
+      if (ip) {
+         fetchLocation(ip);
+      }
+   }, [ip]);
 
    const fetchIP = async () => {
       const res = await fetch("https://api.ipify.org?format=json");
@@ -27,16 +35,6 @@ const GetUserLocation = () => {
 
       setLocation(data);
    };
-
-   useEffect(() => {
-      fetchIP();
-   }, []);
-
-   useEffect(() => {
-      if (ip) {
-         fetchLocation(ip);
-      }
-   }, [ip]);
 
    return (
       <div>
