@@ -20,9 +20,7 @@ export const createUser = (data: User) => {
 };
 
 // Todo need to work on this
-export const updateUser = (data: any, id: string) => {
-   console.log("data", data, "id", id);
-
+export const updateUser = (data: User, id: string) => {
    try {
       const updateUser = prisma.user.update({
          where: {
@@ -33,7 +31,7 @@ export const updateUser = (data: any, id: string) => {
 
       return updateUser;
    } catch (error) {
-      return null;
+      console.log("Error updating", error);
    }
 };
 

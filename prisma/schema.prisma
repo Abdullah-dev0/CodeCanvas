@@ -21,11 +21,17 @@ model User {
 }
 
 model Project {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   name        String
-  description String?
-  githubUrl   String?
-  websiteUrl  String?
-  author      User    @relation(fields: [authorId], references: [id])
-  authorId    String  @db.ObjectId
+  description String
+  githubUrl   String
+  websiteUrl  String
+  author      User     @relation(fields: [authorId], references: [id])
+  authorId    String   @db.ObjectId
+  frameworks  String
+  style       String
+  useCase     String
+  image       String[]
+  createdAt   Int
+  updatedAt   Int
 }
