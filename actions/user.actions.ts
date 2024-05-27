@@ -52,3 +52,25 @@ export const deleteUser = (id: string) => {
       console.log("Error deleting", error);
    }
 };
+
+export const getUserById = (id: string) => {
+   if (!id) {
+      return new Response("No ID provided to get user", { status: 400 });
+   }
+
+   try {
+      const user = prisma.user.findUnique({
+         where: {
+            clerkId: id,
+         },
+      });
+
+      if (!user) {
+         return new Response("No user found", { status: 404 });
+      }
+
+      return user;
+   } catch (error) {
+      console.log("Error getting", error);
+   }
+};

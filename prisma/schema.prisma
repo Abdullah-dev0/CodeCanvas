@@ -8,30 +8,43 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  email     String    @unique
-  clerkId   String    @unique
-  username  String    @unique
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  email     String     @unique
+  clerkId   String     @unique
+  username  String     @unique
   firstName String?
   lastName  String?
   image     String?
   createdAt Int
   updatedAt Int
   Project   Project[]
+  Comments  Comments[]
 }
 
 model Project {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
   githubUrl   String
   websiteUrl  String
-  author      User     @relation(fields: [authorId], references: [id])
-  authorId    String   @db.ObjectId
-  frameworks  String
+  author      User       @relation(fields: [authorId], references: [id])
+  authorId    String     @db.ObjectId
+  framework   String
   style       String
   useCase     String
   image       String[]
-  createdAt   Int
-  updatedAt   Int
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  Comments    Comments[]
+}
+
+model Comments {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  comment   String
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String   @db.ObjectId
+  project   Project  @relation(fields: [projectId], references: [id])
+  projectId String   @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
