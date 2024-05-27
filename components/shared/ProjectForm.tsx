@@ -27,6 +27,7 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { FileUploader } from "./FileUploader";
+import TextEditor from "./TextEditor";
 
 type ProjectFormProps = {
    userId: string;
@@ -44,10 +45,9 @@ const CreateForm = ({ userId }: ProjectFormProps) => {
    });
 
    async function onSubmit(values: z.infer<typeof projectSchema>) {
+      console.log(values);
       let uploadedImageUrl: string[] = values.image;
-      console.log(files);
 
-      console.log(uploadedImageUrl);
       if (uploadedImageUrl.length > 3) {
          setError(
             "You can only upload a maximum of 3 images not more than that"
@@ -76,6 +76,7 @@ const CreateForm = ({ userId }: ProjectFormProps) => {
             setError(res?.error);
          }
       );
+      form.reset();
    }
 
    return (
@@ -230,24 +231,24 @@ const CreateForm = ({ userId }: ProjectFormProps) => {
                         )}
                      />
                   </div>
-
-                  <FormField
-                     control={form.control}
-                     name="description"
-                     render={({ field }) => (
-                        <FormItem className="w-full">
-                           <FormLabel>Descrption</FormLabel>
-                           <FormControl>
-                              <Input
-                                 disabled={form.formState.isSubmitting}
-                                 placeholder="this is an e commernace website"
-                                 {...field}
-                              />
-                           </FormControl>
-                           <FormMessage className="text-red-600/100 font-bold" />
-                        </FormItem>
-                     )}
-                  />
+                  <div className="w-full h-full">
+                     <FormField
+                        control={form.control}
+                        name="description"
+                        render={({ field }) => (
+                           <FormItem className="w-full">
+                              <FormLabel>Descrption</FormLabel>
+                              <FormControl>
+                                 <TextEditor
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                 />
+                              </FormControl>
+                              <FormMessage className="text-red-600/100 font-bold" />
+                           </FormItem>
+                        )}
+                     />
+                  </div>
 
                   <p className="text-red-500 text-base">{error}</p>
                   <Button

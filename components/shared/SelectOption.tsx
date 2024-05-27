@@ -47,7 +47,7 @@ const SelectOption = ({
          <SelectTrigger>
             <SelectValue placeholder={placeholder} />
          </SelectTrigger>
-         <SelectContent>
+         <SelectContent side="top" position="popper">
             {options.map((option: any) => (
                <SelectItem key={option.id} value={option.name}>
                   {option.name}
