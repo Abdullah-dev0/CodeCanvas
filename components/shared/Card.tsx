@@ -12,56 +12,54 @@ import Link from "next/link";
 type CardProps = {
    data: Project[];
 };
+
 const Card = ({ data }: CardProps) => {
    return (
       <div className="shadow-lg">
-         <div>
+         <div className="">
             {data.map((project) => (
                <div
                   key={project.id}
-                  className="grid grid-cols-3 gap-5 justify-center"
+                  className="flex flex-col items-center w-full"
                >
-                  <div>
-                     <Carousel
-                        plugins={[
-                           Autoplay({
-                              delay: 2000,
-                           }),
-                        ]}
-                     >
-                        <CarouselContent>
-                           {project.image.map((img) => (
-                              <CarouselItem key={img}>
-                                 <Image
-                                    src={img}
-                                    alt={project.name}
-                                    width={500}
-                                    height={300}
-                                    className="object-cover w-full h-full"
-                                 />
-                              </CarouselItem>
-                           ))}
-                        </CarouselContent>
-                     </Carousel>
+                  <Carousel
+                     plugins={[
+                        Autoplay({
+                           delay: 2000,
+                        }),
+                     ]}
+                  >
+                     <CarouselContent>
+                        {project.image.map((img) => (
+                           <CarouselItem key={img}>
+                              <Image
+                                 src={img}
+                                 alt={project.name}
+                                  width={500}
+                                  height={500}
+                              />
+                           </CarouselItem>
+                        ))}
+                     </CarouselContent>
+                  </Carousel>
 
-                     <div className="p-6">
-                        <h2 className="font-semibold text-lg">
-                           {project.name}
-                        </h2>
-                        <div
-                           className="prose dark:prose-invert pose-lg max-w-none"
-                           dangerouslySetInnerHTML={{
-                              __html: project.description,
-                           }}
-                        />
-                        <div className="mt-4">
-                           <Link
-                              href={`/projects/${project.id}`}
-                              className="text-blue-500 inline-flex items-center"
-                           >
-                              Learn More
-                           </Link>
-                        </div>
+                  <div className="p-6 w-full">
+                     <h2 className="font-semibold text-lg mb-2">
+                        {project.name}
+                     </h2>
+                     <div
+                        className="prose dark:prose-invert prose-lg max-w-none mb-4"
+                        dangerouslySetInnerHTML={{
+                           __html: project.description,
+                        }}
+                     />
+                     <div className="mt-4">
+                        <Link
+                           href={`/projects/${project.id}`}
+                           className="text-blue-500 inline-flex items-center"
+                        >
+                           Learn More
+                        </Link>
                      </div>
                   </div>
                </div>
