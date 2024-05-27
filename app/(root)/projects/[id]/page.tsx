@@ -1,12 +1,10 @@
-type ProjectDetailProps = {
-   id: string;
-};
 
-const ProjectDetail = ({ id }: ProjectDetailProps) => {
+
+const ProjectDetail = ({ params }: { params: { id: string } }) => {
    return (
       <div>
          <h1>Project Detail</h1>
-         <p>Project ID: {id}</p>
+         <p>Project ID: {params.id}</p>
       </div>
    );
 };
