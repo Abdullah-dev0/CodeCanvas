@@ -1,7 +1,11 @@
+import { getAllProjects } from "@/actions/project.actions";
+import Collections from "@/components/shared/Collections";
 import SearchTemplates from "@/components/shared/SearchTemplates";
+import { Project } from "@prisma/client";
 import Link from "next/link";
 
 const HomePage = async () => {
+   const projects = (await getAllProjects()) as Project[];
    return (
       <>
          <section className="max-lg:px-3 h-full  w-full">
@@ -32,12 +36,12 @@ const HomePage = async () => {
          </section>
 
          <section className="">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between  items-center">
                <h1 className="text-lg font-medium">Lastest Templates</h1>
-               <div>
-                  <SearchTemplates />
-               </div>
+               <SearchTemplates />
             </div>
+
+            <Collections data={projects} />
          </section>
       </>
    );

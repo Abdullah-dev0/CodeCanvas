@@ -43,6 +43,7 @@ const SelectOption = ({
          onValueChange={onChangeHandler}
          disabled={state}
          defaultValue={value}
+         value={value}
       >
          <SelectTrigger>
             <SelectValue placeholder={placeholder} />

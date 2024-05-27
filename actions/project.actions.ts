@@ -38,3 +38,33 @@ export const uploadProject = async (
       console.log(error);
    }
 };
+
+export const getProjectById = async (id: string) => {
+   try {
+      const project = await prisma.project.findUnique({
+         where: {
+            id,
+         },
+      });
+
+      if (!project) {
+         console.log("Project not found");
+      }
+      return project;
+   } catch (error: any) {
+      console.log(error);
+   }
+};
+
+export const getAllProjects = async () => {
+   try {
+      const projects = await prisma.project.findMany();
+      if (!projects) {
+         console.log("No projects found");
+      }
+
+      return projects;
+   } catch (error) {
+      console.log(error);
+   }
+};
