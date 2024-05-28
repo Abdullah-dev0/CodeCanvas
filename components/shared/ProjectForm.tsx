@@ -1,5 +1,5 @@
 "use client";
-import { uploadProject } from "@/actions/project.actions";
+import { updateProject, uploadProject } from "@/actions/project.actions";
 import SelectOptions from "@/components/shared/SelectOption";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +13,7 @@ import { projectDefaultValues } from "@/constant";
 import { useUploadThing } from "@/lib/uploadthing";
 import { projectSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Project } from "@prisma/client";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -31,9 +32,11 @@ import TextEditor from "./TextEditor";
 
 type ProjectFormProps = {
    userId: string;
+   type: "create" | "update";
+   data?: Project;
 };
 
-const CreateForm = ({ userId }: ProjectFormProps) => {
+const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
    const [files, setFiles] = useState<File[]>([]);
    const [error, setError] = useState<string | undefined>("");
    const { startUpload } = useUploadThing("imageUploader");
@@ -41,11 +44,12 @@ const CreateForm = ({ userId }: ProjectFormProps) => {
 
    const form = useForm<z.infer<typeof projectSchema>>({
       resolver: zodResolver(projectSchema),
-      defaultValues: initialValues,
+      defaultValues: data ? data : initialValues,
    });
 
+   const { dirtyFields } = form.formState;
+
    async function onSubmit(values: z.infer<typeof projectSchema>) {
-      console.log(values);
       let uploadedImageUrl: string[] = values.image;
 
       if (uploadedImageUrl.length > 3) {
@@ -70,17 +74,31 @@ const CreateForm = ({ userId }: ProjectFormProps) => {
          ...uploadedImageUrl.slice(1),
       ];
 
-      setError("");
-      await uploadProject({ ...values, image: imageTuple }, userId).then(
-         (res) => {
-            setError(res?.error);
+      if (type === "create") {
+         setError("");
+         await uploadProject({ ...values, image: imageTuple }, userId).then(
+            (res) => {
+               setError(res?.error);
+            }
+         );
+      } else {
+         if (Object.values(dirtyFields).length === 0) {
+            setError("No changes made to the project");
+            return;
          }
-      );
+         const updatedValues = { ...values };
+
+         setError("");
+         await updateProject(updatedValues, data!.id).then((res) => {
+            setError(res?.error);
+         });
+      }
+
       form.reset();
    }
 
    return (
-      <Card className="w-full">
+      <Card className="w-full mb-10">
          <CardHeader>
             <CardTitle>Create project</CardTitle>
             <CardDescription>
@@ -208,30 +226,32 @@ const CreateForm = ({ userId }: ProjectFormProps) => {
                         )}
                      />
                   </div>
-                  <div className="mt-2">
-                     <FormField
-                        control={form.control}
-                        name="image"
-                        render={({ field }) => (
-                           <FormItem className="w-full">
-                              <FormLabel>Upload images</FormLabel>
-                              <FormControl>
-                                 <FileUploader
-                                    disabled={form.formState.isSubmitting}
-                                    imageUrls={field.value}
-                                    onFieldChange={field.onChange}
-                                    setFiles={setFiles}
-                                 />
-                              </FormControl>
-                              <FormDescription className="text-bold ">
-                                 You can only upload a maximum of 3 images
-                              </FormDescription>
-                              <FormMessage className="text-red-600/100 font-bold" />
-                           </FormItem>
-                        )}
-                     />
-                  </div>
-                  <div className="w-full h-full">
+                  {type === "create" && (
+                     <div className="mt-2 max-md:mx-auto">
+                        <FormField
+                           control={form.control}
+                           name="image"
+                           render={({ field }) => (
+                              <FormItem className="w-full">
+                                 <FormLabel>Upload images</FormLabel>
+                                 <FormControl>
+                                    <FileUploader
+                                       disabled={form.formState.isSubmitting}
+                                       imageUrls={field.value}
+                                       onFieldChange={field.onChange}
+                                       setFiles={setFiles}
+                                    />
+                                 </FormControl>
+                                 <FormDescription className="text-bold ">
+                                    You can only upload a maximum of 3 images
+                                 </FormDescription>
+                                 <FormMessage className="text-red-600/100 font-bold" />
+                              </FormItem>
+                           )}
+                        />
+                     </div>
+                  )}
+                  <div>
                      <FormField
                         control={form.control}
                         name="description"
@@ -252,11 +272,13 @@ const CreateForm = ({ userId }: ProjectFormProps) => {
 
                   <p className="text-red-500 text-base">{error}</p>
                   <Button
-                     className="w-fit"
+                     className="w-2/12 max-md:w-full"
                      disabled={form.formState.isSubmitting}
                      type="submit"
                   >
-                     {form.formState.isSubmitting ? "Submitting..." : "Deploy"}
+                     {form.formState.isSubmitting
+                        ? "Submitting..."
+                        : `${type} Project`}
                   </Button>
                </form>
             </Form>

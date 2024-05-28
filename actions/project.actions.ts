@@ -18,16 +18,16 @@ export const uploadProject = async (
       return { error: "You can only upload a maximum of 3 images" };
    }
    try {
-      const getcurrentUser = (await getUserById(userid)) as User;
+      const getCurrentUser = (await getUserById(userid)) as User;
 
-      if (!getcurrentUser) {
-         return { error: "User not found" };
+      if (!getCurrentUser) {
+         return null;
       }
 
       const project = await prisma.project.create({
          data: {
             ...values,
-            authorId: getcurrentUser?.id,
+            authorId: getCurrentUser?.id,
          },
       });
 
@@ -64,6 +64,27 @@ export const getAllProjects = async () => {
       }
 
       return projects;
+   } catch (error) {
+      console.log(error);
+   }
+};
+
+export const updateProject = async (
+   values: z.infer<typeof projectSchema>,
+   id: string
+) => {
+   try {
+      const updateProject = await prisma.project.update({
+         where: {
+            id,
+         },
+         data: {
+            ...values,
+         },
+      });
+      if (!updateProject) {
+         return { error: "Error occured while updating project" };
+      }
    } catch (error) {
       console.log(error);
    }

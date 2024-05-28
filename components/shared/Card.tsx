@@ -1,13 +1,8 @@
 "use client";
-import {
-   Carousel,
-   CarouselContent,
-   CarouselItem,
-} from "@/components/ui/carousel";
 import { Project } from "@prisma/client";
-import Autoplay from "embla-carousel-autoplay";
-import Image from "next/image";
 import Link from "next/link";
+import { Button } from "../ui/button";
+import Slides from "./Slides";
 
 type CardProps = {
    data: Project[];
@@ -20,28 +15,14 @@ const Card = ({ data }: CardProps) => {
             {data.map((project) => (
                <div
                   key={project.id}
-                  className="flex flex-col items-center w-full"
+                  className="flex flex-col items-center"
                >
-                  <Carousel
-                     plugins={[
-                        Autoplay({
-                           delay: 2000,
-                        }),
-                     ]}
-                  >
-                     <CarouselContent>
-                        {project.image.map((img) => (
-                           <CarouselItem key={img}>
-                              <Image
-                                 src={img}
-                                 alt={project.name}
-                                  width={500}
-                                  height={500}
-                              />
-                           </CarouselItem>
-                        ))}
-                     </CarouselContent>
-                  </Carousel>
+                  <Slides
+                     width={200}
+                     height={200}
+                     type="card"
+                     project={project}
+                  />
 
                   <div className="p-6 w-full">
                      <h2 className="font-semibold text-lg mb-2">
@@ -61,6 +42,11 @@ const Card = ({ data }: CardProps) => {
                            Learn More
                         </Link>
                      </div>
+                  </div>
+                  <div>
+                     <Link href={`/projects/${project.id}/update`}>
+                        <Button>Edit </Button>
+                     </Link>
                   </div>
                </div>
             ))}

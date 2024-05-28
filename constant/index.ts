@@ -4,11 +4,6 @@ export const navLinks = [
       name: "Dashboard",
       url: "/dashboard",
    },
-   {
-      id: 2,
-      name: "Create project",
-      url: "/projects/create",
-   },
 ];
 
 export const projectDefaultValues = {

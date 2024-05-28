@@ -1,14 +1,18 @@
 import { getAllProjects } from "@/actions/project.actions";
 import Collections from "@/components/shared/Collections";
 import SearchTemplates from "@/components/shared/SearchTemplates";
-import { Project } from "@prisma/client";
+import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 
 const HomePage = async () => {
-   const projects = (await getAllProjects()) as Project[];
+   const { userId } = auth();
+   const projects = await getAllProjects();
+
+   if (!projects) return null;
+
    return (
       <>
-         <section className="max-lg:px-3 h-full  w-full">
+         <section className="max-lg:px-3">
             <div className="flex py-28 justify-center flex-col gap-5 text-center mx-auto max-w-[1080px]">
                <h1 className="text-5xl font-medium  capitalize max-sm:text-3xl">
                   your destination for
@@ -27,11 +31,15 @@ const HomePage = async () => {
                   <span className="text-purple-400"> perfect</span> starting
                   point right here.
                </p>
-               <Link href="/auth/sign-in">
-                  <button className="bg-gradient-to-r from-purple-900 to-pink-600 text-white font-semibold py-2 px-4 rounded-md shadow-lg w-fit mx-auto">
-                     Sign In to Share Your Templates
-                  </button>
-               </Link>
+               <div>
+                  {!userId && (
+                     <Link href="/auth/sign-in">
+                        <button className="bg-gradient-to-r from-purple-900 to-pink-600 text-white font-semibold py-2 px-4 rounded-md shadow-lg max-w-none mx-auto">
+                           Sign In to Share Your Templates
+                        </button>
+                     </Link>
+                  )}
+               </div>
             </div>
          </section>
 
