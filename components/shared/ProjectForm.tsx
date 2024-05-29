@@ -11,9 +11,11 @@ import {
 } from "@/components/ui/card";
 import { projectDefaultValues } from "@/constant";
 import { useUploadThing } from "@/lib/uploadthing";
+import { cleanHtmlContent } from "@/lib/utils";
 import { projectSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Project } from "@prisma/client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -32,7 +34,7 @@ import TextEditor from "./TextEditor";
 
 type ProjectFormProps = {
    userId: string;
-   type: "create" | "update";
+   type: "Create" | "Update";
    data?: Project;
 };
 
@@ -41,6 +43,7 @@ const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
    const [error, setError] = useState<string | undefined>("");
    const { startUpload } = useUploadThing("imageUploader");
    const initialValues = projectDefaultValues;
+   const router = useRouter();
 
    const form = useForm<z.infer<typeof projectSchema>>({
       resolver: zodResolver(projectSchema),
@@ -50,6 +53,7 @@ const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
    const { dirtyFields } = form.formState;
 
    async function onSubmit(values: z.infer<typeof projectSchema>) {
+      const clean = cleanHtmlContent(values.description);
       let uploadedImageUrl: string[] = values.image;
 
       if (uploadedImageUrl.length > 3) {
@@ -74,27 +78,35 @@ const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
          ...uploadedImageUrl.slice(1),
       ];
 
-      if (type === "create") {
+      if (type === "Create") {
          setError("");
-         await uploadProject({ ...values, image: imageTuple }, userId).then(
-            (res) => {
-               setError(res?.error);
-            }
+         const newProject = await uploadProject(
+            { ...values, image: imageTuple, description: clean },
+            userId
          );
+
+         if (!newProject) return null;
+
+         if (newProject) {
+            router.push(`/projects/${newProject.id}`);
+            form.reset();
+         }
       } else {
          if (Object.values(dirtyFields).length === 0) {
             setError("No changes made to the project");
             return;
          }
-         const updatedValues = { ...values };
+         const updatedValues = { ...values, description: clean };
 
          setError("");
-         await updateProject(updatedValues, data!.id).then((res) => {
+         updateProject(updatedValues, data!.id).then((res) => {
             setError(res?.error);
+            if (!res?.error) {
+               router.push(`/projects/${data!.id}`);
+               form.reset();
+            }
          });
       }
-
-      form.reset();
    }
 
    return (
@@ -176,6 +188,7 @@ const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
                               <FormLabel>Style</FormLabel>
                               <FormControl>
                                  <SelectOptions
+                                    state={form.formState.isSubmitting}
                                     type="style"
                                     value={field.value}
                                     onChangeHandler={field.onChange}
@@ -196,6 +209,7 @@ const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
                               <FormLabel>Framework</FormLabel>
                               <FormControl>
                                  <SelectOptions
+                                    state={form.formState.isSubmitting}
                                     type="framework"
                                     value={field.value}
                                     onChangeHandler={field.onChange}
@@ -226,7 +240,7 @@ const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
                         )}
                      />
                   </div>
-                  {type === "create" && (
+                  {type === "Create" && (
                      <div className="mt-2 max-md:mx-auto">
                         <FormField
                            control={form.control}
@@ -270,7 +284,9 @@ const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
                      />
                   </div>
 
-                  <p className="text-red-500 text-base">{error}</p>
+                  <p className="text-red-500 text-base rounded-md p-2">
+                     {error}
+                  </p>
                   <Button
                      className="w-2/12 max-md:w-full"
                      disabled={form.formState.isSubmitting}

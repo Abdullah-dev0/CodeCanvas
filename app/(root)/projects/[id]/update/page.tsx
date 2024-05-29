@@ -13,7 +13,7 @@ const Update = async ({ params: { id } }: UpdateEventProps) => {
    if (!project) return null;
    return (
       <>
-         <ProjectForm userId={userId} data={project} type={"update"} />
+         <ProjectForm userId={userId} data={project} type={"Update"} />
       </>
    );
 };

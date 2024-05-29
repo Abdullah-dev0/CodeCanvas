@@ -1,3 +1,4 @@
+"use client";
 import {
    Carousel,
    CarouselContent,
@@ -24,22 +25,22 @@ const Slides = ({ type, project, width, height }: SlidesProps) => {
    return (
       <Carousel plugins={type === "card" ? [autoplayPlugin] : []}>
          <CarouselContent>
-            {project.image.map((img) => (
+            {project?.image.map((img) => (
                <CarouselItem key={img}>
                   <Image
                      src={img}
                      alt={project.name}
                      width={width}
                      height={height}
-                     className="h-[200px] object-cover w-full"
+                     className=" object-cover h-[200px] w-full"
                   />
                </CarouselItem>
             ))}
          </CarouselContent>
          {type === "description" && (
             <>
-               <CarouselPrevious />
-               <CarouselNext />
+               <CarouselPrevious className="left-2" />
+               <CarouselNext className="right-2" />
             </>
          )}
       </Carousel>

@@ -1,7 +1,9 @@
+"use server";
+
 import prisma from "@/lib/PrismaClient";
 import { User } from "@prisma/client";
 
-export const createUser = (data: User) => {
+export const createUser = async (data: User) => {
    if (!data)
       return new Response("No data provided to create user", { status: 400 });
    try {
@@ -20,7 +22,7 @@ export const createUser = (data: User) => {
 };
 
 // Todo need to work on this
-export const updateUser = (data: User, id: string) => {
+export const updateUser = async (data: User, id: string) => {
    try {
       const updateUser = prisma.user.update({
          where: {
@@ -35,7 +37,7 @@ export const updateUser = (data: User, id: string) => {
    }
 };
 
-export const deleteUser = (id: string) => {
+export const deleteUser = async (id: string) => {
    if (!id) {
       return new Response("No ID provided to delete user", { status: 400 });
    }
@@ -53,7 +55,7 @@ export const deleteUser = (id: string) => {
    }
 };
 
-export const getUserById = (id: string) => {
+export const getUserById = async (id: string) => {
    if (!id) {
       return new Response("No ID provided to get user", { status: 400 });
    }

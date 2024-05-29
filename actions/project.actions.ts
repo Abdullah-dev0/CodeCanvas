@@ -11,12 +11,13 @@ export const uploadProject = async (
    userid: string
 ) => {
    if (!values) {
-      return { error: "No data provided" };
+      console.log("no value Provided");
    }
 
    if (values.image.length > 3) {
-      return { error: "You can only upload a maximum of 3 images" };
+      console.log(" cannot upload more then 3 images  ");
    }
+
    try {
       const getCurrentUser = (await getUserById(userid)) as User;
 
@@ -32,8 +33,10 @@ export const uploadProject = async (
       });
 
       if (!project) {
-         return { error: "Error occured while creating project" };
+         console.log("Error occured while creating project");
       }
+
+      return project;
    } catch (error: any) {
       console.log(error);
    }
@@ -59,6 +62,7 @@ export const getProjectById = async (id: string) => {
 export const getAllProjects = async () => {
    try {
       const projects = await prisma.project.findMany();
+
       if (!projects) {
          console.log("No projects found");
       }
@@ -85,6 +89,28 @@ export const updateProject = async (
       if (!updateProject) {
          return { error: "Error occured while updating project" };
       }
+   } catch (error) {
+      console.log(error);
+   }
+};
+
+export const getProjectsByUserId = async (id: string) => {
+   try {
+      const user = (await getUserById(id)) as User;
+
+      if (!user) return null;
+
+      const projects = await prisma.project.findMany({
+         where: {
+            authorId: user.id,
+         },
+      });
+
+      if (!projects) {
+         console.log("No projects found");
+      }
+
+      return projects;
    } catch (error) {
       console.log(error);
    }

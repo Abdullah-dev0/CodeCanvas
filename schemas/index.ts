@@ -7,7 +7,7 @@ export const projectSchema = z.object({
    description: z
       .string()
       .min(3, "Description is required and must be at least 3 characters")
-      .max(2000, "Description must not exceed 2000 characters"), // description constraints
+      .max(1400, "Description must not exceed 1400 characters"), // description constraints
    githubUrl: z
       .string()
       .url("Must be a valid URL")

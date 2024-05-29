@@ -30,14 +30,11 @@ export function FileUploader({
 
          const updatedUrls = [...imageUrls, ...newUrls];
 
-      
-
          // Update setFiles with the sliced files
-        setFiles((prevFiles) => {
-           if (prevFiles.length >= 3) prevFiles.shift(); // Remove the first element
-           return [...prevFiles, ...slicedFiles];
-        });
-
+         setFiles((prevFiles) => {
+            if (prevFiles.length >= 3) prevFiles.shift(); // Remove the first element
+            return [...prevFiles, ...slicedFiles];
+         });
 
          onFieldChange(updatedUrls);
       },
