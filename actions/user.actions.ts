@@ -21,7 +21,8 @@ export const createUser = async (data: User) => {
    }
 };
 
-// Todo need to work on this
+
+
 export const updateUser = async (data: User, id: string) => {
    try {
       const updateUser = prisma.user.update({

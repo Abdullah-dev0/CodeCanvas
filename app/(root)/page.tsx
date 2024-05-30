@@ -1,11 +1,10 @@
 import { getAllProjects } from "@/actions/project.actions";
 import Collections from "@/components/shared/Collections";
 import SearchTemplates from "@/components/shared/SearchTemplates";
-import { auth } from "@clerk/nextjs/server";
+import { SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
 
 const HomePage = async () => {
-   const { userId } = auth();
    const projects = await getAllProjects();
 
    if (!projects) return null;
@@ -32,13 +31,13 @@ const HomePage = async () => {
                   point right here.
                </p>
                <div>
-                  {!userId && (
+                  <SignedOut>
                      <Link href="/auth/sign-in">
                         <button className="bg-gradient-to-r from-purple-900 to-pink-600 text-white font-semibold py-2 px-4 rounded-md shadow-lg max-w-none mx-auto">
                            Sign In to Share Your Templates
                         </button>
                      </Link>
-                  )}
+                  </SignedOut>
                </div>
             </div>
          </section>

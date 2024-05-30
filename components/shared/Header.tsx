@@ -1,5 +1,6 @@
 "use client";
 
+import { ModeToggle } from "@/components/shared/Toggle";
 import { navLinks } from "@/constant";
 import {
    SignInButton,
@@ -11,7 +12,6 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ModeToggle } from "../theme/Toggle";
 import { Button } from "../ui/button";
 const Header = () => {
    const pathname = usePathname();
@@ -28,7 +28,7 @@ const Header = () => {
                   height={50}
                />
             </Link>
-            {userId && (
+            <SignedIn>
                <nav>
                   <ul className="flex gap-5">
                      {navLinks.map((link) => (
@@ -45,7 +45,7 @@ const Header = () => {
                      ))}
                   </ul>
                </nav>
-            )}
+            </SignedIn>
          </div>
          <div className="flex items-center gap-5">
             <ModeToggle />

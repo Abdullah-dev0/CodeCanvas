@@ -1,4 +1,4 @@
-import { ThemeProvider } from "@/components/theme/theme-provider";
+import { ThemeProvider } from "@/providers/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark, shadesOfPurple } from "@clerk/themes";
 import type { Metadata } from "next";
