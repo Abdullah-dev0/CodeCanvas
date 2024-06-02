@@ -1,15 +1,15 @@
 import { Project } from "@prisma/client";
-import Card from "./Card";
+import CardComponent from "./Card";
 
 type CollectionsProps = {
    data: Project[];
 };
 
-const Collections = ({ data }: CollectionsProps) => {
+const Collections = async ({ data }: CollectionsProps) => {
    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-12 gap-5  ">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-6 md:px-4 gap-5">
          {data.map((project) => (
-            <Card key={project.id} data={project} />
+            <CardComponent key={project.id} data={project} />
          ))}
       </div>
    );

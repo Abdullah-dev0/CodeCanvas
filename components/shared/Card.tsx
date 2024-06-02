@@ -1,39 +1,46 @@
+"use client";
+
+import { Card, CardContent } from "@/components/ui/card";
+import { useUser } from "@clerk/nextjs";
 import { Project } from "@prisma/client";
-import Link from "next/link";
-import { Button } from "../ui/button";
-import Slides from "./Slides";
+import Image from "next/image";
 
 type CardProps = {
    data: Project;
 };
 
-const Card = ({ data }: CardProps) => {
+const CardComponent = ({ data }: CardProps) => {
+   const { isLoaded, isSignedIn, user } = useUser();
+   if (!user) return null;
    return (
-      <div className="shadow-lg">
-         <div className="">
-            <div key={data.id} className="flex flex-col items-center">
-               <Slides width={200} height={200} type="card" project={data} />
-               <div className="p-6 w-full">
-                  <h2 className="font-semibold text-lg mb-2">{data.name}</h2>
-
-                  <div className="mt-4">
-                     <Link
-                        href={`/projects/${data.id}`}
-                        className="text-blue-500 inline-flex items-center"
-                     >
-                        Learn More
-                     </Link>
-                  </div>
-               </div>
-               <div>
-                  <Link href={`/projects/${data.id}/update`}>
-                     <Button>Edit </Button>
-                  </Link>
-               </div>
+      <Card className="mx-auto shadow-lg rounded-lg overflow-hidden flex flex-col">
+         <Image
+            src={data.image}
+            alt={data.name}
+            width={400}
+            height={400}
+            objectFit="cover"
+            className="w-full p-2  md:min-h-[232px] object-cover"
+         />
+         <CardContent className="p-4 flex-grow">
+            <div className="flex items-center gap-3 mb-4 flex-grow">
+               <Image
+                  src={user.imageUrl}
+                  alt={"user"}
+                  width={35}
+                  height={35}
+                  className="rounded-full"
+               />
+               <h3 className="font-medium text-lg">{user?.username}</h3>
             </div>
+            <h3 className="text-xl font-semibold mb-2">{data.name}</h3>
+         </CardContent>
+         <div className="bg-gray-300/50 h-px w-full"></div>
+         <div className="w-full p-4 mt-auto">
+            <h3 className="text-md font-medium">{data.framework}</h3>
          </div>
-      </div>
+      </Card>
    );
 };
 
-export default Card;
+export default CardComponent;

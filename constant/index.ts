@@ -14,7 +14,7 @@ export const projectDefaultValues = {
    framework: "",
    style: "",
    useCase: "",
-   image: [],
+   image: "",
 };
 
 export const frameworks = [

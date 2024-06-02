@@ -16,7 +16,5 @@ export const projectSchema = z.object({
    framework: z.string().min(1, "Framework is required"), // framework constraints
    style: z.string().min(1, "Style is required"), // style is optional
    useCase: z.string().min(1, "usecase is required"), // useCase is optional
-   image: z
-      .array(z.string().url("Each image must be a valid URL"))
-      .min(3, "At least 3 image URL is required"), // image is an array of valid URLs// image is an array of valid URLs
+   image: z.string().min(1, "Please upload image"), // image is an array of valid URLs// image is an array of valid URLs
 });

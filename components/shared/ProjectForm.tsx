@@ -54,14 +54,7 @@ const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
 
    async function onSubmit(values: z.infer<typeof projectSchema>) {
       const clean = cleanHtmlContent(values.description);
-      let uploadedImageUrl: string[] = values.image;
-
-      if (uploadedImageUrl.length > 3) {
-         setError(
-            "You can only upload a maximum of 3 images not more than that"
-         );
-         return;
-      }
+      let uploadedImageUrl = values.image;
 
       if (files.length > 0) {
          const uploadedImages = await startUpload(files);
@@ -70,18 +63,13 @@ const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
             return;
          }
 
-         uploadedImageUrl = uploadedImages.map((image) => image.url);
+         uploadedImageUrl = uploadedImages[0].url;
       }
-
-      const imageTuple: [string, ...string[]] = [
-         uploadedImageUrl[0],
-         ...uploadedImageUrl.slice(1),
-      ];
 
       if (type === "Create") {
          setError("");
          const newProject = await uploadProject(
-            { ...values, image: imageTuple, description: clean },
+            { ...values, image: uploadedImageUrl, description: clean },
             userId
          );
 
@@ -241,29 +229,27 @@ const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
                      />
                   </div>
                   {type === "Create" && (
-                     <div className="mt-2 max-md:mx-auto">
-                        <FormField
-                           control={form.control}
-                           name="image"
-                           render={({ field }) => (
-                              <FormItem className="w-full">
-                                 <FormLabel>Upload images</FormLabel>
-                                 <FormControl>
-                                    <FileUploader
-                                       disabled={form.formState.isSubmitting}
-                                       imageUrls={field.value}
-                                       onFieldChange={field.onChange}
-                                       setFiles={setFiles}
-                                    />
-                                 </FormControl>
-                                 <FormDescription className="text-bold ">
-                                    You can only upload a maximum of 3 images
-                                 </FormDescription>
-                                 <FormMessage className="text-red-600/100 font-bold" />
-                              </FormItem>
-                           )}
-                        />
-                     </div>
+                     <FormField
+                        control={form.control}
+                        name="image"
+                        render={({ field }) => (
+                           <FormItem className="w-fit">
+                              <FormLabel>Upload images</FormLabel>
+                              <FormControl>
+                                 <FileUploader
+                                    disabled={form.formState.isSubmitting}
+                                    imageUrl={field.value}
+                                    onFieldChange={field.onChange}
+                                    setFiles={setFiles}
+                                 />
+                              </FormControl>
+                              <FormDescription className="text-bold ">
+                                 You can only upload a maximum of 3 images
+                              </FormDescription>
+                              <FormMessage className="text-red-600/100 font-bold" />
+                           </FormItem>
+                        )}
+                     />
                   )}
                   <div>
                      <FormField

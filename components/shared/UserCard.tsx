@@ -1,3 +1,6 @@
+
+//not in used yet will delete later
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { currentUser } from "@clerk/nextjs/server";
 import { PhoneIcon } from "lucide-react";
