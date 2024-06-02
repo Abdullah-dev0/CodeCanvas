@@ -3,6 +3,7 @@
 import prisma from "@/lib/PrismaClient";
 import { projectSchema } from "@/schemas";
 import { User } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getUserById } from "./user.actions";
 
@@ -35,7 +36,7 @@ export const uploadProject = async (
       if (!project) {
          console.log("Error occured while creating project");
       }
-
+      revalidatePath("/");
       return project;
    } catch (error: any) {
       console.log(error);
@@ -61,7 +62,16 @@ export const getProjectById = async (id: string) => {
 
 export const getAllProjects = async () => {
    try {
-      const projects = await prisma.project.findMany();
+      const projects = await prisma.project.findMany({
+         include: {
+            author: {
+               select: {
+                  username: true,
+                  image: true,
+               },
+            },
+         },
+      });
 
       if (!projects) {
          console.log("No projects found");
@@ -103,6 +113,14 @@ export const getProjectsByUserId = async (id: string) => {
       const projects = await prisma.project.findMany({
          where: {
             authorId: user.id,
+         },
+         include: {
+            author: {
+               select: {
+                  username: true,
+                  image: true,
+               },
+            },
          },
       });
 

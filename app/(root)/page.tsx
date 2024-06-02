@@ -6,13 +6,12 @@ import Link from "next/link";
 
 const HomePage = async () => {
    const projects = await getAllProjects();
-
    if (!projects) return null;
 
    return (
       <>
          <section className="max-lg:px-3">
-            <div className="flex py-28 justify-center flex-col gap-5 text-center mx-auto max-w-[1080px]">
+            <div className="flex py-24 justify-center flex-col gap-5 text-center mx-auto max-w-[1080px]">
                <h1 className="text-5xl font-medium  capitalize max-sm:text-3xl">
                   your destination for
                   <span className="text-green-500"> developer</span> templates

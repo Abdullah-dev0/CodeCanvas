@@ -1,8 +1,8 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { useUser } from "@clerk/nextjs";
-import { Project } from "@prisma/client";
+
+import { Project } from "@/types/index";
 import Image from "next/image";
 
 type CardProps = {
@@ -10,8 +10,6 @@ type CardProps = {
 };
 
 const CardComponent = ({ data }: CardProps) => {
-   const { isLoaded, isSignedIn, user } = useUser();
-   if (!user) return null;
    return (
       <Card className="mx-auto shadow-lg rounded-lg overflow-hidden flex flex-col">
          <Image
@@ -19,19 +17,20 @@ const CardComponent = ({ data }: CardProps) => {
             alt={data.name}
             width={400}
             height={400}
+            loading="lazy"
             objectFit="cover"
-            className="w-full p-2  md:min-h-[232px] object-cover"
+            className="w-full p-2 md:w-[400px] md:h-[232px] object-cover"
          />
          <CardContent className="p-4 flex-grow">
             <div className="flex items-center gap-3 mb-4 flex-grow">
                <Image
-                  src={user.imageUrl}
+                  src={data.author.image || "/user.png"}
                   alt={"user"}
                   width={35}
                   height={35}
                   className="rounded-full"
                />
-               <h3 className="font-medium text-lg">{user?.username}</h3>
+               <h3 className="font-medium text-lg">{data.author?.username}</h3>
             </div>
             <h3 className="text-xl font-semibold mb-2">{data.name}</h3>
          </CardContent>
