@@ -73,10 +73,10 @@ const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
             userId
          );
 
-         if (!newProject) return null;
+         setError(newProject?.error);
 
-         if (newProject) {
-            router.push(`/projects/${newProject.id}`);
+         if (newProject?.success) {
+            router.push(`/projects/${newProject.project.id}`);
             form.reset();
          }
       } else {
@@ -89,7 +89,8 @@ const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
          setError("");
          updateProject(updatedValues, data!.id).then((res) => {
             setError(res?.error);
-            if (!res?.error) {
+
+            if (res?.success) {
                router.push(`/projects/${data!.id}`);
                form.reset();
             }
@@ -273,6 +274,7 @@ const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
                   <p className="text-red-500 text-base rounded-md p-2">
                      {error}
                   </p>
+
                   <Button
                      className="w-2/12 max-md:w-full"
                      disabled={form.formState.isSubmitting}

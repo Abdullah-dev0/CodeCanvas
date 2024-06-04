@@ -3,7 +3,6 @@
 import prisma from "@/lib/PrismaClient";
 import { projectSchema } from "@/schemas";
 import { User } from "@prisma/client";
-import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getUserById } from "./user.actions";
 
@@ -15,15 +14,11 @@ export const uploadProject = async (
       console.log("no value Provided");
    }
 
-   if (values.image.length > 3) {
-      console.log(" cannot upload more then 3 images  ");
-   }
-
    try {
       const getCurrentUser = (await getUserById(userid)) as User;
 
       if (!getCurrentUser) {
-         return null;
+         return { error: "User not found" };
       }
 
       const project = await prisma.project.create({
@@ -34,10 +29,10 @@ export const uploadProject = async (
       });
 
       if (!project) {
-         console.log("Error occured while creating project");
+         return { error: "Error occured while creating project" };
       }
-      revalidatePath("/");
-      return project;
+
+      return { success: "Project created successfully", project };
    } catch (error: any) {
       console.log(error);
    }
@@ -48,6 +43,14 @@ export const getProjectById = async (id: string) => {
       const project = await prisma.project.findUnique({
          where: {
             id,
+         },
+         include: {
+            author: {
+               select: {
+                  username: true,
+                  image: true,
+               },
+            },
          },
       });
 
@@ -99,6 +102,8 @@ export const updateProject = async (
       if (!updateProject) {
          return { error: "Error occured while updating project" };
       }
+
+      return { success: "Project updated successfully", updateProject };
    } catch (error) {
       console.log(error);
    }
@@ -108,7 +113,7 @@ export const getProjectsByUserId = async (id: string) => {
    try {
       const user = (await getUserById(id)) as User;
 
-      if (!user) return null;
+      if (!user) throw new Response("User not found");
 
       const projects = await prisma.project.findMany({
          where: {
@@ -125,7 +130,9 @@ export const getProjectsByUserId = async (id: string) => {
       });
 
       if (!projects) {
-         console.log("No projects found");
+         throw new Response(
+            "No projects found or there was an error fetching projects"
+         );
       }
 
       return projects;

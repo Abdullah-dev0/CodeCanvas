@@ -3,7 +3,8 @@
 import { Card, CardContent } from "@/components/ui/card";
 
 import { Project } from "@/types/index";
-import { ExternalLink } from "lucide-react";
+import { useAuth } from "@clerk/nextjs";
+import { ExternalLink, FilePenLine } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -13,8 +14,10 @@ type CardProps = {
 };
 
 const CardComponent = ({ data }: CardProps) => {
+   const { isLoaded, userId } = useAuth();
+   const isAuthor = data.authorId === userId;
    return (
-      <Card className="mx-auto shadow-lg rounded-lg overflow-hidden flex flex-col">
+      <Card className="mx-auto shadow-lg rounded-lg overflow-hidden flex flex-col relative">
          <Suspense
             fallback={<div className="flex flex-center">Loading...</div>}
          >
@@ -47,6 +50,12 @@ const CardComponent = ({ data }: CardProps) => {
                <ExternalLink />
             </Link>
          </div>
+         <Link
+            href={`projects/${data.id}/update`}
+            className="absolute right-2 top-2 flex flex-col gap-4 rounded-xl bg-white p-2 shadow-sm transition-all"
+         >
+            <FilePenLine size={24} className="text-black" />
+         </Link>
       </Card>
    );
 };
