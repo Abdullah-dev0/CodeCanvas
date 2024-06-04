@@ -32,7 +32,7 @@ const HomePage = async () => {
                <div>
                   <SignedOut>
                      <Link href="/auth/sign-in">
-                        <button className="bg-gradient-to-r from-purple-900 to-pink-600 text-white font-semibold py-2 px-4 rounded-md shadow-lg max-w-none mx-auto">
+                        <button className="bg-gradient-to-r from-purple-800 to-pink-600 text-white font-semibold py-2 px-4 rounded-md shadow-lg max-w-none mx-auto">
                            Sign In to Share Your Templates
                         </button>
                      </Link>

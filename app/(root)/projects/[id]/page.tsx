@@ -30,6 +30,7 @@ const ProjectDetail = async ({ params }: { params: { id: string } }) => {
                   alt={data.name}
                   width={400}
                   height={300}
+                  className="w-full px-5"
                />
             </div>
             <div

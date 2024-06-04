@@ -23,7 +23,7 @@ const Dashboard = async () => {
             <Collections data={projects} />
          ) : (
             <div className="flex justify-center  py-28">
-               <h1 className="uppercase  font-medium">
+               <h1 className="uppercase text-xl">
                   You have not created any projects. 😢
                </h1>
             </div>
