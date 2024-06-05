@@ -3,6 +3,7 @@
 import prisma from "@/lib/PrismaClient";
 import { projectSchema } from "@/schemas";
 import { User } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getUserById } from "./user.actions";
 
@@ -136,6 +137,24 @@ export const getProjectsByUserId = async (id: string) => {
       }
 
       return projects;
+   } catch (error) {
+      console.log(error);
+   }
+};
+
+export const deleteProject = async (id: string, path: string) => {
+   try {
+      const project = await prisma.project.delete({
+         where: {
+            id,
+         },
+      });
+
+      if (!project) {
+         return { error: "Error occured while deleting project" };
+      }
+      revalidatePath(path);
+      return { success: "Project deleted successfully", project };
    } catch (error) {
       console.log(error);
    }

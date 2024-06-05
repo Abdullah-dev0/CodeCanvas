@@ -22,12 +22,16 @@ const Dashboard = async () => {
             </Link>
          </div>
          {projects?.length > 0 ? (
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense
+               fallback={
+                  <div className="grid place-items-center h-[50vh]">Loading...</div>
+               }
+            >
                <Collections data={projects} />
             </Suspense>
          ) : (
             <div className="flex justify-center  py-28">
-               <h1 className="uppercase text-xl">
+               <h1 className="capitalize text-xl">
                   You have not created any projects. 😢
                </h1>
             </div>

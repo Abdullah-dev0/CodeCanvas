@@ -3,18 +3,18 @@
 import { Card, CardContent } from "@/components/ui/card";
 
 import { Project } from "@/types/index";
-import { useAuth } from "@clerk/nextjs";
-import { ExternalLink, FilePenLine } from "lucide-react";
+import { Edit2, ExternalLink } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
+import { DeleteConfirmation } from "./DeleteConformation";
 
 type CardProps = {
    data: Project;
+   userId: string;
 };
 
-const CardComponent = ({ data }: CardProps) => {
-   const { isLoaded, userId } = useAuth();
+const CardComponent = ({ data, userId }: CardProps) => {
    const isAuthor = data.authorId === userId;
    return (
       <Card className="mx-auto shadow-lg rounded-lg overflow-hidden flex flex-col relative">
@@ -50,12 +50,15 @@ const CardComponent = ({ data }: CardProps) => {
                <ExternalLink />
             </Link>
          </div>
-         <Link
-            href={`projects/${data.id}/update`}
-            className="absolute right-2 top-2 flex flex-col gap-4 rounded-xl bg-white p-2 shadow-sm transition-all"
-         >
-            <FilePenLine size={24} className="text-black" />
-         </Link>
+         {isAuthor && (
+            <div className="absolute right-2 top-2 flex flex-col gap-4 rounded-xl bg-white p-2 shadow-sm transition-all">
+               <Link href={`/projects/${data.id}/update`}>
+                  <Edit2 size={22} className="text-blue-500" />
+               </Link>
+
+               <DeleteConfirmation projectId={data.id} />
+            </div>
+         )}
       </Card>
    );
 };

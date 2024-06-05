@@ -10,7 +10,7 @@ const ProjectDetail = async ({ params }: { params: { id: string } }) => {
 
    return (
       <section
-         className="grid lg:grid-cols-3 grid-col-1 gap-12 max-w-[1080px] mx-auto justify-center
+         className="grid lg:grid-cols-3 divide-x grid-col-1 gap-12 max-w-[1080px] mx-auto justify-center
       "
       >
          <div className="w-full px-4 flex flex-col gap-4">
@@ -75,7 +75,7 @@ const ProjectDetail = async ({ params }: { params: { id: string } }) => {
                />
             </div>
             <div
-               className="prose dark:prose-invert p-3 whitespace-pre-wrap  max-w-none mb-4"
+               className="prose dark:prose-invert p-3 whitespace-pre-wrap  max-w-none py-2"
                dangerouslySetInnerHTML={{
                   __html: data.description,
                }}

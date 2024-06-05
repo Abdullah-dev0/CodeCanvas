@@ -244,9 +244,7 @@ const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
                                     setFiles={setFiles}
                                  />
                               </FormControl>
-                              <FormDescription className="text-bold ">
-                                 You can only upload a maximum of 3 images
-                              </FormDescription>
+                              
                               <FormMessage className="text-red-600/100 font-bold" />
                            </FormItem>
                         )}

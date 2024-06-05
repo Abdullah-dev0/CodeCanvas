@@ -19,7 +19,7 @@ const Header = () => {
 
    return (
       <header className="flex justify-between border-b border-slate-200 p-3 w-full items-center max-w-screen-xl mx-auto flex-wrap gap-2 max-sm:p-3">
-         <div className="flex gap-12 items-center">
+         <div className="flex gap-8 items-center">
             <Link href="/">
                <Image
                   src="/assets/logo.png"

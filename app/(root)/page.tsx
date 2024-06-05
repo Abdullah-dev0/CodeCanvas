@@ -16,7 +16,7 @@ const HomePage = async () => {
                   your destination for
                   <span className="text-green-500"> developer</span> templates
                </h1>
-               <p className="text-[15px] sm:text-lg text-slate-500">
+               <p className="text-base sm:text-xl text-slate-500">
                   Looking for a quick start on your next project? Welcome to
                   <span className="text-blue-400"> CodeCanvas</span> Where
                   developers like you share their expertise through a diverse

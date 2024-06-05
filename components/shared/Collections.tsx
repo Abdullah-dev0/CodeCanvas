@@ -1,5 +1,7 @@
+import { getUserById } from "@/actions/user.actions";
 import { Project } from "@/types/index";
-import { Suspense } from "react";
+import { auth } from "@clerk/nextjs/server";
+import { User } from "@prisma/client";
 import CardComponent from "./Card";
 
 type CollectionsProps = {
@@ -7,12 +9,17 @@ type CollectionsProps = {
 };
 
 const Collections = async ({ data }: CollectionsProps) => {
+   const { userId } = auth();
+   const getCurrentUser = (await getUserById(userId!)) as User;
+
    return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-6 md:px-4 gap-5">
          {data.map((project) => (
-            <Suspense key={project.id} fallback={<div>Loading...</div>}>
-               <CardComponent key={project.id} data={project} />
-            </Suspense>
+            <CardComponent
+               key={project.id}
+               userId={getCurrentUser?.id}
+               data={project}
+            />
          ))}
       </div>
    );
