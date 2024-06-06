@@ -22,7 +22,6 @@ import { z } from "zod";
 import {
    Form,
    FormControl,
-   FormDescription,
    FormField,
    FormItem,
    FormLabel,
@@ -43,6 +42,7 @@ const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
    const [error, setError] = useState<string | undefined>("");
    const { startUpload } = useUploadThing("imageUploader");
    const initialValues = projectDefaultValues;
+   const pathname = "/";
    const router = useRouter();
 
    const form = useForm<z.infer<typeof projectSchema>>({
@@ -70,7 +70,8 @@ const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
          setError("");
          const newProject = await uploadProject(
             { ...values, image: uploadedImageUrl, description: clean },
-            userId
+            userId,
+            pathname
          );
 
          setError(newProject?.error);
@@ -244,7 +245,7 @@ const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
                                     setFiles={setFiles}
                                  />
                               </FormControl>
-                              
+
                               <FormMessage className="text-red-600/100 font-bold" />
                            </FormItem>
                         )}
@@ -259,6 +260,7 @@ const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
                               <FormLabel>Descrption</FormLabel>
                               <FormControl>
                                  <TextEditor
+                                    disabled={form.formState.isSubmitting}
                                     value={field.value}
                                     onChange={field.onChange}
                                  />

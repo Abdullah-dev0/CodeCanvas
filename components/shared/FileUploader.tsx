@@ -1,40 +1,49 @@
-import { useDropzone } from "@uploadthing/react/hooks";
-import { Dispatch, SetStateAction, useCallback } from "react";
-import { generateClientDropzoneAccept } from "uploadthing/client";
-
 import { Button } from "@/components/ui/button";
 import { convertFileToUrl } from "@/lib/utils";
+import { useDropzone } from "@uploadthing/react/hooks";
 import Image from "next/image";
+import { Dispatch, SetStateAction, useCallback } from "react";
+import { generateClientDropzoneAccept } from "uploadthing/client";
 
 type FileUploaderProps = {
    onFieldChange: (url: string) => void;
    imageUrl: string;
    setFiles: Dispatch<SetStateAction<File[]>>;
-   disabled?: boolean;
+   disabled: boolean;
 };
 
 export function FileUploader({
    imageUrl,
    onFieldChange,
    setFiles,
+   disabled,
 }: FileUploaderProps) {
-   const onDrop = useCallback((acceptedFiles: any) => {
-      setFiles(acceptedFiles);
-      onFieldChange(convertFileToUrl(acceptedFiles[0]));
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, []);
+   const onDrop = useCallback(
+      (acceptedFiles: File[]) => {
+         setFiles(acceptedFiles);
+         onFieldChange(convertFileToUrl(acceptedFiles[0]));
+      },
+      [setFiles, onFieldChange]
+   );
 
    const { getRootProps, getInputProps } = useDropzone({
       onDrop,
-      accept: "image/*" ? generateClientDropzoneAccept(["image/*"]) : undefined,
+      accept: generateClientDropzoneAccept(["image/*"]),
+      disabled,
    });
 
    return (
       <div
          {...getRootProps()}
-         className="flex-center bg-dark-3 flex h-72 cursor-pointer rounded-xl bg-grey-50"
+         className={`flex-center bg-dark-3 flex h-72 rounded-xl bg-grey-50 ${
+            disabled ? "cursor-not-allowed" : "cursor-pointer"
+         }`}
       >
-         <input {...getInputProps()} className="cursor-pointer" />
+         <input
+            {...getInputProps()}
+            className="cursor-pointer"
+            disabled={disabled}
+         />
 
          {imageUrl ? (
             <div className="flex h-full">
@@ -56,7 +65,11 @@ export function FileUploader({
                />
                <h3 className="mb-2 mt-2">Drag photo here</h3>
                <p className="p-medium-12 mb-4">SVG, PNG, JPG</p>
-               <Button type="button" className="rounded-full">
+               <Button
+                  type="button"
+                  className="rounded-full"
+                  disabled={disabled}
+               >
                   Select from computer
                </Button>
             </div>

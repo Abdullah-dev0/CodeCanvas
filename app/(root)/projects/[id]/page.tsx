@@ -1,7 +1,7 @@
 import { getProjectById } from "@/actions/project.actions";
+import BackButton from "@/components/shared/Back";
 import { Button } from "@/components/ui/button";
 import { Project } from "@/types";
-import { MoveLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -10,16 +10,11 @@ const ProjectDetail = async ({ params }: { params: { id: string } }) => {
 
    return (
       <section
-         className="grid lg:grid-cols-3 divide-x grid-col-1 gap-12 max-w-[1080px] mx-auto justify-center
+         className="grid lg:grid-cols-3 md:divide-x grid-col-1 gap-12 max-w-[1080px] mx-auto justify-center
       "
       >
          <div className="w-full px-4 flex flex-col gap-4">
-            <Link href={"/"}>
-               <Button variant={"ghost"} className="w-fit">
-                  <MoveLeft className="mx-2" />
-                  Back
-               </Button>
-            </Link>
+            <BackButton />
 
             <div className="border border-gray-30 /40p-3 rounded-3xl">
                <div className="flex gap-2 items-center p-3">

@@ -1,7 +1,5 @@
 "use client";
 
-import { useTransition } from "react";
-
 import {
    AlertDialog,
    AlertDialogAction,
@@ -13,6 +11,7 @@ import {
    AlertDialogTitle,
    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useState, useTransition } from "react";
 
 import { deleteProject } from "@/actions/project.actions";
 import { Trash2 } from "lucide-react";
@@ -21,33 +20,39 @@ import { usePathname } from "next/navigation";
 export const DeleteConfirmation = ({ projectId }: { projectId: string }) => {
    const path = usePathname();
    let [isPending, startTransition] = useTransition();
+   const [isOpen, setIsOpen] = useState(false);
+
+   const handleDelete = () => {
+      startTransition(async () => {
+         await deleteProject(projectId, path);
+         setIsOpen(false); // Close the dialog after deletion is complete
+      });
+   };
 
    return (
-      <AlertDialog>
-         <AlertDialogTrigger>
-            <Trash2 size={22} className="text-red-500" />
+      <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+         <AlertDialogTrigger asChild>
+            <button onClick={() => setIsOpen(true)}>
+               <Trash2 size={22} className="text-red-500" />
+            </button>
          </AlertDialogTrigger>
 
-         <AlertDialogContent className="">
+         <AlertDialogContent>
             <AlertDialogHeader>
                <AlertDialogTitle>
                   Are you sure you want to delete?
                </AlertDialogTitle>
                <AlertDialogDescription className="p-regular-16 text-grey-600">
-                  This will permanently delete this event
+                  This will permanently delete this event.
                </AlertDialogDescription>
             </AlertDialogHeader>
 
             <AlertDialogFooter>
-               <AlertDialogCancel>Cancel</AlertDialogCancel>
+               <AlertDialogCancel onClick={() => setIsOpen(false)}>
+                  Cancel
+               </AlertDialogCancel>
 
-               <AlertDialogAction
-                  onClick={() =>
-                     startTransition(async () => {
-                        await deleteProject(projectId, path);
-                     })
-                  }
-               >
+               <AlertDialogAction onClick={handleDelete}>
                   {isPending ? "Deleting..." : "Delete"}
                </AlertDialogAction>
             </AlertDialogFooter>

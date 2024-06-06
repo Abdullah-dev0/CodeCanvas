@@ -9,7 +9,8 @@ import { getUserById } from "./user.actions";
 
 export const uploadProject = async (
    values: z.infer<typeof projectSchema>,
-   userid: string
+   userid: string,
+   pathname: string
 ) => {
    if (!values) {
       console.log("no value Provided");
@@ -32,7 +33,7 @@ export const uploadProject = async (
       if (!project) {
          return { error: "Error occured while creating project" };
       }
-
+      revalidatePath(pathname);
       return { success: "Project created successfully", project };
    } catch (error: any) {
       console.log(error);

@@ -4,9 +4,10 @@ import "react-quill/dist/quill.snow.css";
 type TextEditorProps = {
    value: string;
    onChange: (value: string) => void;
+   disabled?: boolean;
 };
 
-function TextEditor({ value, onChange }: TextEditorProps) {
+function TextEditor({ value, onChange, disabled }: TextEditorProps) {
    const toolbarOptions = [
       ["bold", "italic", "underline", "strike"], // toggled buttons
       ["blockquote", "code-block"],
@@ -36,6 +37,7 @@ function TextEditor({ value, onChange }: TextEditorProps) {
       <ReactQuill
          modules={modules}
          theme="snow"
+         readOnly={disabled}
          value={value}
          onChange={onChange}
       />

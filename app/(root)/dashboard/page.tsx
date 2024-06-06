@@ -24,7 +24,9 @@ const Dashboard = async () => {
          {projects?.length > 0 ? (
             <Suspense
                fallback={
-                  <div className="grid place-items-center h-[50vh]">Loading...</div>
+                  <div className="grid place-items-center h-[50vh]">
+                     Loading...
+                  </div>
                }
             >
                <Collections data={projects} />
