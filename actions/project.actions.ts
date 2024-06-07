@@ -51,6 +51,7 @@ export const getProjectById = async (id: string) => {
                select: {
                   username: true,
                   image: true,
+                  id: true,
                },
             },
          },

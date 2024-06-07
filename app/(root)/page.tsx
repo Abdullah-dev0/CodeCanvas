@@ -1,11 +1,12 @@
 import { getAllProjects } from "@/actions/project.actions";
 import Collections from "@/components/shared/Collections";
 import SearchTemplates from "@/components/shared/SearchTemplates";
+import { Project } from "@/types";
 import { SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
 
 const HomePage = async () => {
-   const projects = await getAllProjects();
+   const projects = (await getAllProjects()) as Project[];
    if (!projects) return null;
 
    return (
@@ -43,7 +44,9 @@ const HomePage = async () => {
 
          <section className="">
             <div className="flex justify-between  items-center">
-               <h1 className="text-lg font-medium">Lastest Templates</h1>
+               <h1 className="text-2xl max-sm:text-xl font-medium">
+                  Lastest Templates
+               </h1>
                <SearchTemplates />
             </div>
 

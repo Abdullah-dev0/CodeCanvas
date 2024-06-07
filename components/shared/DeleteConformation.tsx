@@ -25,7 +25,7 @@ export const DeleteConfirmation = ({ projectId }: { projectId: string }) => {
    const handleDelete = () => {
       startTransition(async () => {
          await deleteProject(projectId, path);
-         setIsOpen(false); // Close the dialog after deletion is complete
+         setIsOpen(false);
       });
    };
 

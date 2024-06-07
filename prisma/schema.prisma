@@ -19,6 +19,7 @@ model User {
   updatedAt Int
   Project   Project[]
   Comments  Comments[]
+  Like      Like[]
 }
 
 model Project {
@@ -36,6 +37,7 @@ model Project {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   Comments    Comments[]
+  Like        Like[]
 }
 
 model Comments {
@@ -45,6 +47,16 @@ model Comments {
   authorId  String   @db.ObjectId
   project   Project  @relation(fields: [projectId], references: [id])
   projectId String   @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Like {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String   @unique @db.ObjectId
+  project   Project  @relation(fields: [projectId], references: [id])
+  projectId String   @unique @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

@@ -47,7 +47,7 @@ const Header = () => {
                </nav>
             </SignedIn>
          </div>
-         <div className="flex items-center gap-5">
+         <div className="flex items-center k gap-5">
             <ModeToggle />
             <SignedOut>
                <SignInButton>
@@ -56,7 +56,9 @@ const Header = () => {
             </SignedOut>
 
             <SignedIn>
-               <UserButton />
+               <span className="min-w-6">
+                  <UserButton />
+               </span>
             </SignedIn>
          </div>
       </header>

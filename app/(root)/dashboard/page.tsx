@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Project } from "@/types";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
-import { Suspense } from "react";
 
 const Dashboard = async () => {
    const { userId } = auth();
@@ -22,15 +21,7 @@ const Dashboard = async () => {
             </Link>
          </div>
          {projects?.length > 0 ? (
-            <Suspense
-               fallback={
-                  <div className="grid place-items-center h-[50vh]">
-                     Loading...
-                  </div>
-               }
-            >
-               <Collections data={projects} />
-            </Suspense>
+            <Collections data={projects} />
          ) : (
             <div className="flex justify-center  py-28">
                <h1 className="capitalize text-xl">

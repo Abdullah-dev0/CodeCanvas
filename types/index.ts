@@ -1,4 +1,5 @@
 type Author = {
+   id: string;
    image: string | null;
    username: string;
 };
