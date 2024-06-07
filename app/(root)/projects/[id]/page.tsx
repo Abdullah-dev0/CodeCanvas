@@ -1,4 +1,4 @@
-import { getProjectById } from "@/actions/project.actions";
+import { getProjectAndLikesById } from "@/actions/project.actions";
 import { getUserById } from "@/actions/user.actions";
 import BackButton from "@/components/shared/Back";
 import LikeButton from "@/components/shared/LikeButton";
@@ -12,11 +12,10 @@ import Link from "next/link";
 const ProjectDetail = async ({ params }: { params: { id: string } }) => {
    const { userId } = auth();
    const user = (await getUserById(userId!)) as User;
-   const data = (await getProjectById(
+   const data = (await getProjectAndLikesById(
       params.id,
       user.id
    )) as ProjectWithLikesAndUserLike;
-   console.log(data);
 
    return (
       <section
@@ -25,6 +24,12 @@ const ProjectDetail = async ({ params }: { params: { id: string } }) => {
       >
          <div className="w-full px-4 flex flex-col gap-4">
             <BackButton />
+            <LikeButton
+               projectId={data.id}
+               totalLikes={data._count.Like}
+               userId={user.id}
+               isliked={data.likedByCurrentUser}
+            />
 
             <div className="border border-gray-30 /40p-3 rounded-3xl">
                <div className="flex gap-2 items-center p-3">
@@ -86,12 +91,6 @@ const ProjectDetail = async ({ params }: { params: { id: string } }) => {
                }}
             />
          </div>
-         <LikeButton
-            projectId={data.id}
-            totalLikes={data._count.Like}
-            userId={user.id}
-            isliked={data.likedByCurrentUser}
-         />
       </section>
    );
 };

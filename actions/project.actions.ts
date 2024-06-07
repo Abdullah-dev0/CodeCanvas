@@ -40,7 +40,7 @@ export const uploadProject = async (
    }
 };
 
-export const getProjectById = async (id: string, userId: string) => {
+export const getProjectAndLikesById = async (id: string, userId: string) => {
    try {
       const project = await prisma.project.findUnique({
          where: {
@@ -79,6 +79,26 @@ export const getProjectById = async (id: string, userId: string) => {
          ...project,
          likedByCurrentUser,
       };
+   } catch (error: any) {
+      console.log(error);
+      return null;
+   }
+};
+
+export const getProjectById = async (id: string) => {
+   try {
+      const project = await prisma.project.findUnique({
+         where: {
+            id,
+         },
+      });
+
+      if (!project) {
+         console.log("Project not found");
+         return null;
+      }
+
+      return project;
    } catch (error: any) {
       console.log(error);
       return null;
