@@ -1,10 +1,9 @@
-import { getTotalLikes } from "@/actions/like.actions";
 import { getProjectById } from "@/actions/project.actions";
 import { getUserById } from "@/actions/user.actions";
 import BackButton from "@/components/shared/Back";
 import LikeButton from "@/components/shared/LikeButton";
 import { Button } from "@/components/ui/button";
-import { Project } from "@/types";
+import { ProjectWithLikesAndUserLike } from "@/types";
 import { auth } from "@clerk/nextjs/server";
 import { User } from "@prisma/client";
 import Image from "next/image";
@@ -12,9 +11,12 @@ import Link from "next/link";
 
 const ProjectDetail = async ({ params }: { params: { id: string } }) => {
    const { userId } = auth();
-   const data = (await getProjectById(params.id)) as Project;
    const user = (await getUserById(userId!)) as User;
-   const totalLikes = (await getTotalLikes(data.id)) as number;
+   const data = (await getProjectById(
+      params.id,
+      user.id
+   )) as ProjectWithLikesAndUserLike;
+   console.log(data);
 
    return (
       <section
@@ -86,8 +88,9 @@ const ProjectDetail = async ({ params }: { params: { id: string } }) => {
          </div>
          <LikeButton
             projectId={data.id}
-            totalLikes={totalLikes}
+            totalLikes={data._count.Like}
             userId={user.id}
+            isliked={data.likedByCurrentUser}
          />
       </section>
    );

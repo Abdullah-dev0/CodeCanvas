@@ -43,19 +43,3 @@ export const likeToggle = async (
       console.log(error);
    }
 };
-
-export const getTotalLikes = async (projectId: string) => {
-   try {
-      const totalLikes = await prisma.like.count({
-         where: {
-            projectId,
-         },
-      });
-      if (!totalLikes) {
-         throw new Response("Project not found", { status: 404 });
-      }
-      return totalLikes;
-   } catch (error) {
-      console.log(error);
-   }
-};

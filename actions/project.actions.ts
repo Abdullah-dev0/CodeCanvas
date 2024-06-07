@@ -40,7 +40,7 @@ export const uploadProject = async (
    }
 };
 
-export const getProjectById = async (id: string) => {
+export const getProjectById = async (id: string, userId: string) => {
    try {
       const project = await prisma.project.findUnique({
          where: {
@@ -54,15 +54,34 @@ export const getProjectById = async (id: string) => {
                   id: true,
                },
             },
+            _count: {
+               select: {
+                  Like: true,
+               },
+            },
+            Like: {
+               where: {
+                  authorId: userId,
+                  projectId: id,
+               },
+            },
          },
       });
 
       if (!project) {
          console.log("Project not found");
+         return null;
       }
-      return project;
+
+      const likedByCurrentUser = project.Like.length > 0;
+
+      return {
+         ...project,
+         likedByCurrentUser,
+      };
    } catch (error: any) {
       console.log(error);
+      return null;
    }
 };
 

@@ -18,3 +18,10 @@ export type Project = {
    updatedAt: Date;
    author: Author;
 };
+
+export interface ProjectWithLikesAndUserLike extends Project {
+   _count: {
+      Like: number;
+   };
+   likedByCurrentUser: boolean;
+}
