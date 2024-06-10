@@ -12,10 +12,8 @@ export const cleanHtmlContent = (html: any) => {
    const tempElement = document.createElement("div");
    tempElement.innerHTML = html;
 
-   // Remove all <br> tags
    tempElement.querySelectorAll("br").forEach((br) => br.remove());
 
-   // Replace multiple spaces with a single space within the HTML content
    const cleanedHtml = tempElement.innerHTML.replace(/\s\s+/g, " ");
 
    return cleanedHtml;

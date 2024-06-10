@@ -2,6 +2,7 @@ import { getProjectAndLikesById } from "@/actions/project.actions";
 import { getUserById } from "@/actions/user.actions";
 import BackButton from "@/components/shared/Back";
 import LikeButton from "@/components/shared/LikeButton";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ProjectWithLikesAndUserLike } from "@/types";
 import { auth } from "@clerk/nextjs/server";
@@ -19,7 +20,7 @@ const ProjectDetail = async ({ params }: { params: { id: string } }) => {
 
    return (
       <section
-         className="grid lg:grid-cols-3 md:divide-x-reverse grid-col-1 gap-12 max-w-[1080px] mx-auto justify-center
+         className="grid lg:grid-cols-3 md:divide-x-reverse grid-col-1 gap-12 max-w-[1080px] mx-auto justify-center items-center
       "
       >
          <div className="w-full px-4 flex flex-col gap-4">
@@ -33,31 +34,37 @@ const ProjectDetail = async ({ params }: { params: { id: string } }) => {
 
             <div className="border border-gray-30 /40p-3 rounded-3xl">
                <div className="flex gap-2 items-center p-3">
-                  {data.author?.image && (
+                  {data.author?.image ? (
                      <Image
-                        src={data.author.image}
+                        src={data.author.image || ""}
                         alt={data.author.username}
                         width={40}
                         className="rounded-full"
                         height={40}
                      />
+                  ) : (
+                     <Avatar>
+                        <AvatarImage src="https://github.com/shadcn.png" />
+                        <AvatarFallback>CN</AvatarFallback>
+                     </Avatar>
                   )}
                   <p>{data.author?.username}</p>
                </div>
             </div>
             <h1 className="text-xl">Template</h1>
+
             <div className="grid grid-cols-1 divide-y leading-[3.5rem] text-lg">
                <div className="flex justify-between">
                   <h2 className="font-bold">Framework</h2>
-                  <p className="text-gray-300/70">{data.framework}</p>
+                  <p className="dark:text-gray-300/70">{data.framework}</p>
                </div>
                <div className="flex justify-between">
                   <h2 className="font-bold">Use Case</h2>
-                  <p className="text-gray-300/70">{data.useCase}</p>
+                  <p className="dark:text-gray-300/70">{data.useCase}</p>
                </div>
                <div className="flex justify-between">
                   <h2 className="font-bold">Css</h2>
-                  <p className="text-gray-300/70">{data.style}</p>
+                  <p className="dark:text-gray-300/70">{data.style}</p>
                </div>
             </div>
             <div className="flex gap-4 mt-3">

@@ -13,7 +13,7 @@ const Collections = async ({ data }: CollectionsProps) => {
    const getCurrentUser = (await getUserById(userId!)) as User;
 
    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-6 md:px-4 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-6 md:px-4 gap-5">
          {data.map((project) => (
             <CardComponent
                key={project.id}

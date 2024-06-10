@@ -1,3 +1,4 @@
+import { Footer } from "@/components/shared/Footer";
 import Header from "@/components/shared/Header";
 
 export default function RootLayout({
@@ -8,7 +9,10 @@ export default function RootLayout({
    return (
       <main>
          <Header />
-         <main className="max-w-screen-xl mx-auto max-lg:px-4 mt-12">{children}</main>
+         <main className="max-w-screen-xl mx-auto max-lg:px-4 mt-12 py-8">
+            {children}
+         </main>
+         <Footer />
       </main>
    );
 }

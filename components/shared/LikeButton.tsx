@@ -22,7 +22,7 @@ const LikeButton = ({
    return (
       <Button
          variant="outline"
-         className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md"
+         className="flex items-center w-fit gap-2 px-4 py-2 border border-gray-300 rounded-md"
          onClick={() => likeToggle(projectId, userId, pathname)}
       >
          <Heart
