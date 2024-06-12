@@ -1,10 +1,10 @@
 import { getProjectAndLikesById } from "@/actions/project.actions";
 import { getUserById } from "@/actions/user.actions";
 import BackButton from "@/components/shared/Back";
+import CommentSection from "@/components/shared/CommentSection";
 import LikeButton from "@/components/shared/LikeButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { ProjectWithLikesAndUserLike } from "@/types";
 import { auth } from "@clerk/nextjs/server";
 import { User } from "@prisma/client";
 import Image from "next/image";
@@ -13,14 +13,12 @@ import Link from "next/link";
 const ProjectDetail = async ({ params }: { params: { id: string } }) => {
    const { userId } = auth();
    const user = (await getUserById(userId!)) as User;
-   const data = (await getProjectAndLikesById(
-      params.id,
-      user.id
-   )) as ProjectWithLikesAndUserLike;
+   const data = (await getProjectAndLikesById(params.id, user.id)) as any;
+   console.log(data);
 
    return (
       <section
-         className="grid lg:grid-cols-3 md:divide-x-reverse grid-col-1 gap-12 max-w-[1080px] mx-auto justify-center items-center
+         className="grid lg:grid-cols-3 md:divide-x-reverse grid-col-1 gap-12 max-w-[1080px] mx-auto justify-center items-center 
       "
       >
          <div className="w-full px-4 flex flex-col gap-4">
@@ -98,6 +96,11 @@ const ProjectDetail = async ({ params }: { params: { id: string } }) => {
                }}
             />
          </div>
+         <CommentSection
+            comments={data.Comments}
+            projectId={data.id}
+            userId={user.id}
+         />
       </section>
    );
 };
