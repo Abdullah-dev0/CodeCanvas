@@ -23,7 +23,7 @@ const CardComponent = ({ data, userId }: CardProps) => {
             width={400}
             height={400}
             loading="lazy"
-            className="w-full md:w-[400px] md:h-[200px] object-cover"
+            className="w-full md:w-[400px] md:h-[200px] object-contain"
          />
 
          <CardContent className="p-4 flex-grow">

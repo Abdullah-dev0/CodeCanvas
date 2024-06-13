@@ -3,7 +3,6 @@
 import prisma from "@/lib/PrismaClient";
 import { projectSchema } from "@/schemas";
 import { User } from "@prisma/client";
-import console from "console";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getUserById } from "./user.actions";
@@ -48,6 +47,17 @@ export const getProjectAndLikesById = async (id: string, userId: string) => {
             id,
          },
          include: {
+            Comments: {
+               include: {
+                  author: {
+                     select: {
+                        username: true,
+                        image: true,
+                        id: true,
+                     },
+                  },
+               },
+            },
             author: {
                select: {
                   username: true,
@@ -66,17 +76,6 @@ export const getProjectAndLikesById = async (id: string, userId: string) => {
                   projectId: id,
                },
             },
-            Comments: {
-               include: {
-                  author: {
-                     select: {
-                        username: true,
-                        image: true,
-                        id: true,
-                     },
-                  },
-               },
-            },
          },
       });
 
@@ -87,7 +86,9 @@ export const getProjectAndLikesById = async (id: string, userId: string) => {
 
       const likedByCurrentUser = project.Like.length > 0;
 
-      return { ...project, likedByCurrentUser };
+      const comments = JSON.stringify(project.Comments);
+
+      return { ...project, likedByCurrentUser, comments };
    } catch (error: any) {
       console.log(error);
       console.log("Error occured while fetching project", error);
