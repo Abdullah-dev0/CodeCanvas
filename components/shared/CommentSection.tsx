@@ -81,7 +81,10 @@ export const CommentSection = ({
             {comments?.length > 0 ? (
                <div className="flex flex-col gap-2">
                   {comments.map((comment) => (
-                     <div className="flex gap-3 items-center w-full border border-slate-700 p-2 rounded-lg">
+                     <div
+                        key={comment.id}
+                        className="flex gap-3 items-center w-full border border-slate-700 p-2 rounded-lg"
+                     >
                         <Image
                            src={comment.author?.image ?? ""}
                            alt="user"
