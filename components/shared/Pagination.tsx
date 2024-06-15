@@ -30,7 +30,12 @@ const Pagination = ({ page, totalPages }: PaginationProps) => {
       <Button onClick={() => onClick("prev")} disabled={Number(page) <= 1}>
         Previous
       </Button>
-      <Button onClick={() => onClick("next")} disabled={Number(page) >= totalPages!}>
+      <Button
+        onClick={() => onClick("next")}
+        disabled={Number(page) >= totalPages!}
+        className={`
+        ${Number(page) >= totalPages! ? "cursor-not-allowed" : ""}
+        `}>
         next
       </Button>
     </div>

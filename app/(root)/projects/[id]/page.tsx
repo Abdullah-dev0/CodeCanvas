@@ -31,18 +31,20 @@ const ProjectDetail = async ({ searchParams, params }: SearchParamProps) => {
   return (
     <>
       <section
-        className="grid lg:grid-cols-3 md:divide-x-reverse grid-col-1 gap-12 max-w-[1080px] mx-auto justify-center items-center 
+        className="grid lg:grid-cols-3 md:divide-x-reverse grid-col-1 gap-12 max-w-[1080px] mx-auto justify-center grid-cols-1
       ">
         <div className="w-full px-4 flex flex-col gap-4">
-          <BackButton />
-          <LikeButton
-            projectId={data.id}
-            totalLikes={data._count.Like}
-            userId={user.id}
-            isliked={data.likedByCurrentUser}
-          />
+          <div className="flex justify-between gap-4 flex-wrap">
+            <BackButton />
+            <LikeButton
+              projectId={data.id}
+              totalLikes={data._count.Like}
+              userId={user.id}
+              isliked={data.likedByCurrentUser}
+            />
+          </div>
 
-          <div className="border border-gray-30 /40p-3 rounded-3xl">
+          <div className="border border-gray-30/40 rounded-3xl">
             <div className="flex gap-2 items-center p-3">
               {data.author?.image ? (
                 <Image
@@ -64,20 +66,20 @@ const ProjectDetail = async ({ searchParams, params }: SearchParamProps) => {
           <h1 className="text-xl">Template</h1>
 
           <div className="grid grid-cols-1 divide-y leading-[3.5rem] text-lg">
-            <div className="flex justify-between">
+            <div className="flex justify-between flex-wrap">
               <h2 className="font-bold">Framework</h2>
               <p className="dark:text-gray-300/70">{data.framework}</p>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between flex-wrap">
               <h2 className="font-bold">Use Case</h2>
               <p className="dark:text-gray-300/70">{data.useCase}</p>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between flex-wrap">
               <h2 className="font-bold">Css</h2>
               <p className="dark:text-gray-300/70">{data.style}</p>
             </div>
           </div>
-          <div className="flex gap-4 mt-3">
+          <div className="flex justify-between flex-wrap max-sm:flex-col gap-5 mt-3">
             <Button variant={"outline"}>
               <Link target="_blank" href={data.githubUrl}>
                 View Code
@@ -90,7 +92,7 @@ const ProjectDetail = async ({ searchParams, params }: SearchParamProps) => {
             </Button>
           </div>
         </div>
-        <div key={data.id} className="flex flex-col gap-5 lg:col-span-2 px-5">
+        <div key={data.id} className="flex flex-col gap-5 col-span-2 px-5">
           <div className="relative max-w-max  mx-auto">
             <Image
               src={data.image}

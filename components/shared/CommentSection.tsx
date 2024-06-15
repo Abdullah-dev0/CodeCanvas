@@ -42,7 +42,7 @@ export const CommentSection = ({ projectId, userId, comments, page, totalPages }
   };
 
   return (
-    <section className="border-t max-w-[500px] mt-8 py-8">
+    <section className="border-t mt-8 py-8 max-w-screen-md">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-4 w-full">
           <div className="w-full">
@@ -66,13 +66,13 @@ export const CommentSection = ({ projectId, userId, comments, page, totalPages }
       </Form>
       <div className="mt-4 border p-4">
         {comments?.length > 0 ? (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-9">
             {comments.map((comment: any) => (
-              <div key={comment.id} className="flex gap-3 items-center w-full border border-slate-700 p-2 rounded-lg">
+              <div key={comment.id} className="flex transition-all duration-300  gap-3 items-center w-full">
                 <Image src={comment.author?.image ?? ""} alt="user" width={30} height={30} className="rounded-full" />
                 <div className="flex gap-1 sm:justify-between w-full sm:items-center  max-sm:flex-col">
                   <p key={comment.id}>{comment.comment}</p>
-                  <span className="text-[14px] leading-3">{comment.createdAt.toDateString()}</span>
+                  <span className="text-[13px] leading-3">{comment.createdAt.toDateString()}</span>
                 </div>
               </div>
             ))}
