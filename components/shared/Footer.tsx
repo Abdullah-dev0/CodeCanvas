@@ -24,7 +24,7 @@ export function Footer() {
                target="_blank"
                className="underline text-[17px] text-blue-700"
             >
-               Abdullah
+               Abdullah razzaq
             </Link>
          </div>
       </footer>
