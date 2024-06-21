@@ -18,7 +18,7 @@ export function Footer() {
         <p className="mx-2">💖</p>
 
         <Link href="https://github.com/Abdullah-dev0" target="_blank" className="underline text-blue-700">
-          Abdullah Razzaq
+          Abdullah
         </Link>
       </div>
     </footer>
