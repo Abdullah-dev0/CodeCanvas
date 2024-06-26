@@ -1,4 +1,5 @@
 "use client";
+
 import { formUrlQuery } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "../ui/button";
@@ -7,6 +8,8 @@ interface PaginationProps {
   page: number | undefined;
   totalPages: number | undefined;
 }
+
+//want to make this component reusable for home page and project page
 
 const Pagination = ({ page, totalPages }: PaginationProps) => {
   const router = useRouter();

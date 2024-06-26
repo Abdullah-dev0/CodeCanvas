@@ -23,6 +23,7 @@ const LikeButton = ({ projectId, userId, totalLikes, isliked }: LikeButtonProps)
         setLike(!like);
         setLikes(like ? likes - 1 : likes + 1);
         likeToggle(projectId, userId).then((res) => {
+          //not working as expected need to work on this.
           if (!res) {
             setLike(!like);
             setLikes(like ? likes - 1 : likes + 1);
