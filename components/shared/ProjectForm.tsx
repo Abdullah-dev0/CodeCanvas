@@ -20,256 +20,256 @@ import { FileUploader } from "./FileUploader";
 import TextEditor from "./TextEditor";
 
 type ProjectFormProps = {
-  userId: string;
-  type: "Create" | "Update";
-  data?: Project;
+	userId: string;
+	type: "Create" | "Update";
+	data?: Project;
 };
 
 const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
-  const [files, setFiles] = useState<File[]>([]);
-  const [error, setError] = useState<string | undefined>("");
-  const { startUpload } = useUploadThing("imageUploader");
-  const initialValues = projectDefaultValues;
-  const pathname = "/";
-  const router = useRouter();
+	const [files, setFiles] = useState<File[]>([]);
+	const [error, setError] = useState<string | undefined>("");
+	const { startUpload } = useUploadThing("imageUploader");
+	const initialValues = projectDefaultValues;
+	const pathname = "/";
+	const router = useRouter();
 
-  const form = useForm<z.infer<typeof projectSchema>>({
-    resolver: zodResolver(projectSchema),
-    defaultValues: data ? data : initialValues,
-  });
+	const form = useForm<z.infer<typeof projectSchema>>({
+		resolver: zodResolver(projectSchema),
+		defaultValues: data ? data : initialValues,
+	});
 
-  const { dirtyFields } = form.formState;
+	const { dirtyFields } = form.formState;
 
-  async function onSubmit(values: z.infer<typeof projectSchema>) {
-    const clean = cleanHtmlContent(values.description);
-    let uploadedImageUrl = values.image;
+	async function onSubmit(values: z.infer<typeof projectSchema>) {
+		const clean = cleanHtmlContent(values.description);
+		let uploadedImageUrl = values.image;
 
-    if (files.length > 0) {
-      const uploadedImages = await startUpload(files);
+		if (files.length > 0) {
+			const uploadedImages = await startUpload(files);
 
-      if (!uploadedImages) {
-        return;
-      }
+			if (!uploadedImages) {
+				return;
+			}
 
-      uploadedImageUrl = uploadedImages[0].url;
-    }
+			uploadedImageUrl = uploadedImages[0].url;
+		}
 
-    if (type === "Create") {
-      setError("");
-      const newProject = await uploadProject(
-        { ...values, image: uploadedImageUrl, description: clean },
-        userId,
-        pathname
-      );
+		if (type === "Create") {
+			setError("");
+			const newProject = await uploadProject(
+				{ ...values, image: uploadedImageUrl, description: clean },
+				userId,
+				pathname,
+			);
 
-      setError(newProject?.error);
+			setError(newProject?.error);
 
-      if (newProject?.success) {
-        router.push(`/projects/${newProject.project.id}`);
-        form.reset();
-      }
-    } else {
-      if (Object.values(dirtyFields).length === 0) {
-        setError("No changes made to the project");
-        return;
-      }
-      const updatedValues = { ...values, description: clean };
+			if (newProject?.success) {
+				router.push(`/projects/${newProject.project.id}`);
+				form.reset();
+			}
+		} else {
+			if (Object.values(dirtyFields).length === 0) {
+				setError("No changes made to the project");
+				return;
+			}
+			const updatedValues = { ...values, description: clean };
 
-      setError("");
-      updateProject(updatedValues, data!.id).then((res) => {
-        setError(res?.error);
+			setError("");
+			updateProject(updatedValues, data!.id).then((res) => {
+				setError(res?.error);
 
-        if (res?.success) {
-          router.push(`/projects/${data!.id}`);
-          form.reset();
-        }
-      });
-    }
-  }
+				if (res?.success) {
+					router.push(`/projects/${data!.id}`);
+					form.reset();
+				}
+			});
+		}
+	}
 
-  return (
-    <Card className="w-full mb-10">
-      <CardHeader>
-        <CardTitle>Create project</CardTitle>
-        <CardDescription>Deploy your new project in one-click.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4 w-full">
-            <div className="flex-col flex gap-4 md:flex-row">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Project Name</FormLabel>
-                    <FormControl>
-                      <Input disabled={form.formState.isSubmitting} placeholder="codecanvas" type="text" {...field} />
-                    </FormControl>
-                    <FormMessage className="text-red-600/100 font-bold" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="githubUrl"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Github url</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="url"
-                        disabled={form.formState.isSubmitting}
-                        placeholder="https://google.com"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="text-red-600/100 font-bold" />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="flex-col flex gap-4 md:flex-row">
-              <FormField
-                control={form.control}
-                name="websiteUrl"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Website Url</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="url"
-                        disabled={form.formState.isSubmitting}
-                        placeholder="https://google.com"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="text-red-600/100 font-bold" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="style"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Style</FormLabel>
-                    <FormControl>
-                      <SelectOptions
-                        state={form.formState.isSubmitting}
-                        type="style"
-                        value={field.value}
-                        onChangeHandler={field.onChange}
-                        placeholder="Select style"
-                      />
-                    </FormControl>
-                    <FormMessage className="text-red-600/100 font-bold" />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="flex-col flex gap-4 md:flex-row">
-              <FormField
-                control={form.control}
-                name="framework"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Framework</FormLabel>
-                    <FormControl>
-                      <SelectOptions
-                        state={form.formState.isSubmitting}
-                        type="framework"
-                        value={field.value}
-                        onChangeHandler={field.onChange}
-                        placeholder="Select framework"
-                      />
-                    </FormControl>
-                    <FormMessage className="text-red-600/100 font-bold" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="useCase"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>use case</FormLabel>
-                    <FormControl>
-                      <SelectOptions
-                        state={form.formState.isSubmitting}
-                        type="usecase"
-                        value={field.value}
-                        onChangeHandler={field.onChange}
-                        placeholder="Select usecase"
-                      />
-                    </FormControl>
-                    <FormMessage className="text-red-600/100 font-bold" />
-                  </FormItem>
-                )}
-              />
-            </div>
-            {type === "Create" && (
-              <FormField
-                control={form.control}
-                name="image"
-                render={({ field }) => (
-                  <FormItem className="w-fit">
-                    <FormLabel>Upload images</FormLabel>
-                    <FormControl>
-                      <FileUploader
-                        disabled={form.formState.isSubmitting}
-                        imageUrl={field.value}
-                        onFieldChange={field.onChange}
-                        setFiles={setFiles}
-                      />
-                    </FormControl>
+	return (
+		<Card className="w-full mb-10">
+			<CardHeader>
+				<CardTitle>Create project</CardTitle>
+				<CardDescription>Deploy your new project in one-click.</CardDescription>
+			</CardHeader>
+			<CardContent>
+				<Form {...form}>
+					<form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4 w-full">
+						<div className="flex-col flex gap-4 md:flex-row">
+							<FormField
+								control={form.control}
+								name="name"
+								render={({ field }) => (
+									<FormItem className="w-full">
+										<FormLabel>Project Name</FormLabel>
+										<FormControl>
+											<Input disabled={form.formState.isSubmitting} placeholder="codecanvas" type="text" {...field} />
+										</FormControl>
+										<FormMessage className="text-red-600/100 font-bold" />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="githubUrl"
+								render={({ field }) => (
+									<FormItem className="w-full">
+										<FormLabel>Github url</FormLabel>
+										<FormControl>
+											<Input
+												type="url"
+												disabled={form.formState.isSubmitting}
+												placeholder="https://google.com"
+												{...field}
+											/>
+										</FormControl>
+										<FormMessage className="text-red-600/100 font-bold" />
+									</FormItem>
+								)}
+							/>
+						</div>
+						<div className="flex-col flex gap-4 md:flex-row">
+							<FormField
+								control={form.control}
+								name="websiteUrl"
+								render={({ field }) => (
+									<FormItem className="w-full">
+										<FormLabel>Website Url</FormLabel>
+										<FormControl>
+											<Input
+												type="url"
+												disabled={form.formState.isSubmitting}
+												placeholder="https://google.com"
+												{...field}
+											/>
+										</FormControl>
+										<FormMessage className="text-red-600/100 font-bold" />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="style"
+								render={({ field }) => (
+									<FormItem className="w-full">
+										<FormLabel>Style</FormLabel>
+										<FormControl>
+											<SelectOptions
+												state={form.formState.isSubmitting}
+												type="style"
+												value={field.value}
+												onChangeHandler={field.onChange}
+												placeholder="Select style"
+											/>
+										</FormControl>
+										<FormMessage className="text-red-600/100 font-bold" />
+									</FormItem>
+								)}
+							/>
+						</div>
+						<div className="flex-col flex gap-4 md:flex-row">
+							<FormField
+								control={form.control}
+								name="framework"
+								render={({ field }) => (
+									<FormItem className="w-full">
+										<FormLabel>Framework</FormLabel>
+										<FormControl>
+											<SelectOptions
+												state={form.formState.isSubmitting}
+												type="framework"
+												value={field.value}
+												onChangeHandler={field.onChange}
+												placeholder="Select framework"
+											/>
+										</FormControl>
+										<FormMessage className="text-red-600/100 font-bold" />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="useCase"
+								render={({ field }) => (
+									<FormItem className="w-full">
+										<FormLabel>use case</FormLabel>
+										<FormControl>
+											<SelectOptions
+												state={form.formState.isSubmitting}
+												type="usecase"
+												value={field.value}
+												onChangeHandler={field.onChange}
+												placeholder="Select usecase"
+											/>
+										</FormControl>
+										<FormMessage className="text-red-600/100 font-bold" />
+									</FormItem>
+								)}
+							/>
+						</div>
+						{type === "Create" && (
+							<FormField
+								control={form.control}
+								name="image"
+								render={({ field }) => (
+									<FormItem className="w-fit">
+										<FormLabel>Upload images</FormLabel>
+										<FormControl>
+											<FileUploader
+												disabled={form.formState.isSubmitting}
+												imageUrl={field.value}
+												onFieldChange={field.onChange}
+												setFiles={setFiles}
+											/>
+										</FormControl>
 
-                    <FormMessage className="text-red-600/100 font-bold" />
-                  </FormItem>
-                )}
-              />
-            )}
-            <div className="space-y-2">
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Descrption</FormLabel>
-                    <FormControl>
-                      <TextEditor
-                        disabled={form.formState.isSubmitting}
-                        value={field.value}
-                        onChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormMessage className="text-red-600/100 font-bold" />
-                  </FormItem>
-                )}
-              />
-               {/* need to add a button to generate content using AI and a form to input the prompt */}
-              <Button
-                onClick={(e) => {
-                  setError("");
-                  e.preventDefault();
-                  generateContent(form.getValues("description") as string).then((res) => {
-                    form.setValue("description", res);
-                  });
-                }}>
-                Generate using Ai
-              </Button>
-            </div>
+										<FormMessage className="text-red-600/100 font-bold" />
+									</FormItem>
+								)}
+							/>
+						)}
+						<div className="space-y-2">
+							<FormField
+								control={form.control}
+								name="description"
+								render={({ field }) => (
+									<FormItem className="w-full">
+										<FormLabel>Descrption</FormLabel>
+										<FormControl>
+											<TextEditor
+												disabled={form.formState.isSubmitting}
+												value={field.value}
+												onChange={field.onChange}
+											/>
+										</FormControl>
+										<FormMessage className="text-red-600/100 font-bold" />
+									</FormItem>
+								)}
+							/>
 
-            <p className="text-red-500 text-base rounded-md p-2">{error}</p>
+							<Button
+								onClick={(e) => {
+									setError("");
+									e.preventDefault();
+									generateContent(form.getValues("description") as string).then((res) => {
+										form.setValue("description", res);
+									});
+								}}>
+								Generate using Ai
+							</Button>
+						</div>
 
-            <Button className="w-2/12 max-md:w-full" disabled={form.formState.isSubmitting} type="submit">
-              {form.formState.isSubmitting ? "Submitting..." : `${type} Project`}
-            </Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
-  );
+						<p className="text-red-500 text-base rounded-md p-2">{error}</p>
+
+						<Button className="w-2/12 max-md:w-full" disabled={form.formState.isSubmitting} type="submit">
+							{form.formState.isSubmitting ? "Submitting..." : `${type} Project`}
+						</Button>
+					</form>
+				</Form>
+			</CardContent>
+		</Card>
+	);
 };
 
 export default CreateForm;

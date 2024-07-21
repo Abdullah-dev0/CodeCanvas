@@ -6,12 +6,11 @@ import CommentSection from "@/components/shared/CommentSection";
 import LikeButton from "@/components/shared/LikeButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { ProjectWithLikesAndUserLike, SearchParamProps } from "@/types";
+import { Comment, ProjectWithLikesAndUserLike, SearchParamProps } from "@/types";
 import { auth } from "@clerk/nextjs/server";
 import { User } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
-import { Comment } from "@/types";
 
 interface CommentData {
   comments: Comment[];
