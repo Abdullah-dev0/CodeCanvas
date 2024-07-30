@@ -12,12 +12,12 @@ export async function generateContent(prompt: string) {
 	}
 
 	const modifiablePrompt =
-		prompt + "the description should not exceed 1200 characters write in simple text make bullet points max 3.";
+		prompt +
+		"The description should be not exceed 1200 characters. Avoid complex markup or unattractive formatting.";
 
 	const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 	const result = await model.generateContent(modifiablePrompt);
-	const response = result.response;
-	const text = response.text();
-	return text;
+	const cleanText = result.response.text().replace(/<[^>]*>/g, ""); // Removes
+	return cleanText;
 }

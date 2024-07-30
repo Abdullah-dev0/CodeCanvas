@@ -11,7 +11,7 @@ import { projectSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Project } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
@@ -31,6 +31,7 @@ const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
 	const { startUpload } = useUploadThing("imageUploader");
 	const initialValues = projectDefaultValues;
 	const pathname = "/";
+	const [isPending, startTransition] = useTransition();
 	const router = useRouter();
 
 	const form = useForm<z.infer<typeof projectSchema>>({
@@ -86,6 +87,20 @@ const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
 			});
 		}
 	}
+
+	const generatePromot = async (e: any) => {
+		setError("");
+		e.preventDefault();
+		startTransition(() => {
+			generateContent(form.getValues("description") as string)
+				.then((res) => {
+					form.setValue("description", res);
+				})
+				.catch((err) => {
+					setError(err.message);
+				});
+		});
+	};
 
 	return (
 		<Card className="w-full mb-10">
@@ -249,12 +264,9 @@ const CreateForm = ({ userId, type, data }: ProjectFormProps) => {
 							/>
 
 							<Button
+								disabled={isPending}
 								onClick={(e) => {
-									setError("");
-									e.preventDefault();
-									generateContent(form.getValues("description") as string).then((res) => {
-										form.setValue("description", res);
-									});
+									generatePromot(e);
 								}}>
 								Generate using Ai
 							</Button>
