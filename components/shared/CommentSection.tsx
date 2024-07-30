@@ -77,7 +77,9 @@ export const CommentSection = ({ projectId, userId, comments, page, totalPages }
 									<div className="flex gap-4 items-center">
 										<span className="text-[13px] leading-3">{comment.createdAt.toDateString()}</span>
 
-										<span>{comment.author.id && <DeleteConfirmation action={"comment"} commentId={comment.id} />}</span>
+										<span>
+											{comment.author.id === userId && <DeleteConfirmation action={"comment"} commentId={comment.id} />}
+										</span>
 									</div>
 								</div>
 							</div>

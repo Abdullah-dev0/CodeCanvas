@@ -1,15 +1,15 @@
 "use client";
 
 import {
-   AlertDialog,
-   AlertDialogAction,
-   AlertDialogCancel,
-   AlertDialogContent,
-   AlertDialogDescription,
-   AlertDialogFooter,
-   AlertDialogHeader,
-   AlertDialogTitle,
-   AlertDialogTrigger,
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
@@ -36,7 +36,9 @@ export const DeleteConfirmation = ({ projectId, commentId, action }: DeleteConfi
 				toast(response?.error);
 			}
 			const response = await deleteComment(commentId!, path);
-			toast(response?.error);
+			if (response?.error) {
+				toast(response.error);
+			}
 			setIsOpen(false);
 		});
 	};
