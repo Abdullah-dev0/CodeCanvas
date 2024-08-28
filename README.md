@@ -6,7 +6,6 @@
 
 CodeCanvas is a dynamic platform designed to showcase websites along with their descriptions. It aims to foster a vibrant community where users can discover, interact, and engage with various web projects.
 
-🌐 **Live Website**: [CodeCanvas](https://code-canvas-orpin.vercel.app/)  
 
 ## Key Features
 
